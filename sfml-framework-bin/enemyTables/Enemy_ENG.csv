@@ -1,0 +1,4 @@
+ID,TEXTURE_ID,SPEED,DAMAGE,ATTACK_RATE
+Bloater,Bloater,40,10,2
+Chaser,Chaser,70,5,0.5
+Crawler,Crawler,20,7,1

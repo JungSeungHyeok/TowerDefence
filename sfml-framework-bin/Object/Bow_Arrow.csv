@@ -1,0 +1,6 @@
+ID,FPS,LOOPTYPE,,
+Arrow,10,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+bow_animation(3).png,0,0,37,47
+bow_animation(2).png,0,0,37,47

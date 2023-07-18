@@ -1,0 +1,4 @@
+ID,TEXTURE_ID,SPEED,DAMAGE,ATTACK_RATE
+Bloater,Bloater (일본어),40,10,2
+Chaser,Chaser (일본어),70,5,0.5
+Crawler,Crawler (일본어),20,7,1

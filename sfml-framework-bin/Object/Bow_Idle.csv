@@ -1,0 +1,6 @@
+ID,FPS,LOOPTYPE,,
+Bow_Idle,10,1,,
+,,,,
+TEXTURE ID,LEFT,TOP,WIDTH,HEIGHT
+Towers/Archer/bow_animation(1).png,0,0,37,47
+Towers/Archer/bow_animation(4).png,0,0,37,47
