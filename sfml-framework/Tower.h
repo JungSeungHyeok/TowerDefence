@@ -1,41 +1,52 @@
 #pragma once
 #include "SpriteGo.h"
 #include "AnimationController.h"
-
+#include "Enemy.h"
 
 // 타워도 스프라이트
 // 애니메이션 상태 표현
 
 class SoundGo;
 class SceneDev1;
+class GameObject;
 
-
-//struct Tile
-//{
-//float arrowSpeed = 0.f;
-//int damage = 0.f;
-//};
 
 class Tower : public SpriteGo
 {
+public:
+	enum class Types
+	{
+		ArcherTower1,
+		ArcherTower2,
+		ArcherTower3,
+
+		WizardTower1,
+		WizardTower2,
+		WizardTower3,
+	};
+	static const int TotalTypes = 6;
+
+
 protected:
 	AnimationController animation; // 추가
+	Types towerType;
+
+
+
 	sf::Vector2f direction; // 추가
 
-	bool isInstalled = false;
-	bool testHide = true;
+	//bool isInstalled = false;
+	//bool testHide = true;
 
-	sf::ConvexShape diamond1;
-	sf::ConvexShape diamond2;
-	sf::ConvexShape diamond3;
-	sf::ConvexShape diamond4;
-	sf::ConvexShape diamond5;
-	sf::ConvexShape diamond6;
-
-	sf::FloatRect diaBounds;
-
-	const float diamondWidth = 35.f;
-	const float diamondHeight = 35.f; // 마름모 크기
+	//sf::ConvexShape diamond1;
+	//sf::ConvexShape diamond2;
+	//sf::ConvexShape diamond3;
+	//sf::ConvexShape diamond4;
+	//sf::ConvexShape diamond5;
+	//sf::ConvexShape diamond6;
+	//sf::FloatRect diaBounds;
+	//const float diamondWidth = 35.f;
+	//const float diamondHeight = 35.f; // 마름모 크기
 	
 
 	// bool isHover = false; // 설치 가능한 타일인지 판단
@@ -63,23 +74,28 @@ public:
 
 	bool Load(const std::string& filePath);
 
-	void InstallTower(const sf::Vector2f& isoTileCoords, const sf::Vector2f& tileSize);
+	void SetType(Types t);
+	Types GetType() const;
+
+	void TowerAttack(int damage);
 
 	
-	void rotateDiamond(sf::ConvexShape& diamond, float angle);
-	//회전 보류
+
 
 	
 
 
 
+	//void InstallTower(const sf::Vector2f& isoTileCoords, const sf::Vector2f& tileSize);
 
+	//void rotateDiamond(sf::ConvexShape& diamond, float angle);
+	////회전 보류
 
-	sf::Text text;
-	std::function<void()> OnClick;
-	std::function<void()> OnEnter;
-	std::function<void()> OnExit;
-
+	//sf::Text text;
+	//std::function<void()> OnClick;
+	//std::function<void()> OnEnter;
+	//std::function<void()> OnExit;
+	// 보류
 
 };
 

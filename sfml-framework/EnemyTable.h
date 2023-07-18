@@ -8,9 +8,9 @@ struct EnemyInfo
     Enemy::Types enemyType;
 
     std::string textureId;
-    float speed = 0.f;
-    int maxHp = 0;
-    int hp = 0;
+    float speed;
+    int maxHp;
+    int hp;
 
     //일단 3개만
 };

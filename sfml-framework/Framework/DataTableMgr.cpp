@@ -2,11 +2,14 @@
 #include "DataTableMgr.h"
 #include "StringTable.h"
 #include "EnemyTable.h"
+#include "TowerTable.h"
 
 void DataTableMgr::LoadAll()
 {
 	tables.insert({ DataTable::Ids::String, new StringTable() });
 	tables.insert({ DataTable::Ids::Enemy, new EnemyTable() });
+	tables.insert({ DataTable::Ids::Tower, new TowerTable() }); // 타워 테이블 추가
+
 	//tables.insert({ DataTable::Ids::Enemy, new TowerTable() });
 
 

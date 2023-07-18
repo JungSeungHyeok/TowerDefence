@@ -36,11 +36,11 @@ protected:
 	sf::Vector2f currPoint;
 
 
-	sf::Vector2f point1 = {820.f, 279.f};
-	sf::Vector2f point2 = {551.f, 431.f};
-	sf::Vector2f point3 = { 732.f, 534.f };
-	sf::Vector2f point4 = { 1000.f, 381.f };
-	sf::Vector2f point5 = { 1273.f, 536.f };
+	sf::Vector2f point1 = { 855.f, 280.f};
+	sf::Vector2f point2 = { 584.f, 434.f};
+	sf::Vector2f point3 = { 764.f, 537.f };
+	sf::Vector2f point4 = { 1034.f, 381.f };
+	sf::Vector2f point5 = { 1270.f, 516.f };
 
 	sf::Vector2f direction;
 
@@ -50,7 +50,6 @@ protected:
 	float enemyAccel = 0.f; // 가속도
 
 	bool flipX = false; // 90도로 회전해야될거같은데
-
 
 	bool beatWall = false; // 벽 충돌
 	//{
@@ -80,14 +79,18 @@ public:
 
 	void OnHit(int damage);
 
-
 	void SetType(Types t);
 	Types GetType() const;
-	//타일맵처럼 로드하면 필요없을거 같은데 근데 몬스터는 오브젝트풀
 
 
 	// 정면 벽? void SetWall(); 
 	void SetSound(SoundGo* hitSound) { hitedSound = hitSound; }
+
+
+	// 몬스터가 타워한테 맞는부분
+	void SetPlayer(Tower* tower);
+	void OnTakeDamege(int damage);
+
 
 	bool GetFlipX() const;
 	void SetFlipX(bool flip);

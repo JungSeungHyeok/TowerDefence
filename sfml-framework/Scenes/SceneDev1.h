@@ -3,8 +3,10 @@
 #include "ObjectPool.h"
 #include "AnimationController.h"
 #include <sstream>
+#include "Tower.h"
+#include "SpriteGo.h"
 
-class Tower;
+
 class Enemy;
 
 // class 스프라이트 이펙트
@@ -13,15 +15,34 @@ class TileMap;
 class SceneDev1 : public Scene
 {
 protected:
+	AnimationController animation;
 	TileMap* tileMap = nullptr;
 	Enemy* enemy = nullptr;
 	Tower* tower = nullptr;
+
 	ObjectPool<Enemy> enemyPool;
-	// 스프라이트 이펙트 추후 
-	AnimationController animation;
+	ObjectPool<Tower> towerPool;
 
-	bool isInstalled = false; // 타워 설치 가능한 타일인지 판단
+	bool isInstalled = false;
+	bool testHide = true;
 
+	sf::ConvexShape diamond1;
+	sf::ConvexShape diamond2;
+	sf::ConvexShape diamond3;
+	sf::ConvexShape diamond4;
+	sf::ConvexShape diamond5;
+	sf::ConvexShape diamond6;
+	sf::FloatRect diaBounds;
+
+	const float diamondWidth = 35.f;
+	const float diamondHeight = 35.f; // 마름모 크기
+
+	bool towerBuildCheck1 = true;
+	bool towerBuildCheck2 = true;
+	bool towerBuildCheck3 = true;
+	bool towerBuildCheck4 = true;
+	bool towerBuildCheck5 = true;
+	bool towerBuildCheck6 = true;
 
 	sf::FloatRect enemyBounds; // 충돌체크
 	bool GameOver = false;
@@ -31,11 +52,12 @@ protected:
 
 	int round = 0;
 	int stage = 0;
-	int money = 0;
+	int gold = 0;
 	
 	int frame = 0; // 프레임 체크 시간나면
 	float totalDt = 0;
 	bool frameCheck = false;
+
 public:
 	SceneDev1();
 	virtual ~SceneDev1() override = default;
@@ -54,21 +76,30 @@ public:
 
 	// 게임 시작 종료
 	void StartGame();
-
 	void StartRound();
 	void EndRound();
-
 	void StartStage();
 	void EndStage();
-
 	void SaveFile();
 
 	// 몬스터 관련
 	void SpawnEnemys(int count, sf::Vector2f pos); // 레디우스
-
 	void OnDieEnemy(Enemy* enemy);
-
 	void EnemyEndPoint(Enemy* enemy);
+
+	// 타워 관련 , 셋포지션도 추가
+	/*virtual void SetPosition(float x, float y);
+	virtual void SetPosition(const sf::Vector2f& p);*/
+
+
+	void BuildTower(Tower::Types towerType, sf::Vector2f pos);
+
+
+	/*void BuildTower(Tower::Types type);*/
+
+
+
+
 
 
 	void Test();

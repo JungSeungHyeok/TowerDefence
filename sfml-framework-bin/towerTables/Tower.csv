@@ -1,0 +1,7 @@
+ID,TEXTURE_ID,DAMAGE,RANGE,ATTACKRATE,PRICE
+0,Towers/Archer/archer_level_1.png,10,150,2,70
+1,Towers/Archer/archer_level_2.png,20,300,4,120
+2,Towers/Archer/archer_level_3.png,30,500,8,240
+3,Towers/Wizard/wizard_level_1.png,40,130,1,150
+4,Towers/Wizard/wizard_level_2.png,80,260,1,200
+5,Towers/Wizard/wizard_level_3.png,350,400,1,360

@@ -8,6 +8,7 @@ public:
 		None = -1,
 		String,
 		Enemy,
+		Tower,
 	};
 
 	DataTable(const DataTable& other) = delete;

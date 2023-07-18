@@ -52,8 +52,12 @@ void Enemy::Update(float dt)
 
 	float distance = Utils::Distance(currPoint, position);
 
+	// 실시간 몬스터 위치 + 타워위치
+
+
 	direction = Utils::Normalize(currPoint - position); // 방향 구하고
-	sprite.setRotation(Utils::Angle(direction)); // 추가 // 이미지가 움직인다
+
+	//sprite.setRotation(Utils::Angle(direction)); // 추가 // 이미지가 움직인다
 
 	position += direction * speed * dt;
 	sprite.setPosition(position); // 추가
@@ -151,6 +155,9 @@ void Enemy::SetType(Types t)
 	int index = (int)enemyType;
 	textureId = info.textureId; // 초기화 할 수 있께?
 
+	/*textureId = info.speed;
+	textureId = info.maxHp;*/
+
 }
 
 Enemy::Types Enemy::GetType() const
@@ -180,6 +187,31 @@ void Enemy::OnHit(int damage)
 	}
 }
 
+
+void Enemy::SetPlayer(Tower* tower)
+{
+	this->tower = tower; // 타워의 위치값을 받기위해
+}
+
+void Enemy::OnTakeDamege(int damage)
+{
+	hp -= damage; // hitedSound->sound.play(); 사운드는 나중에
+
+	if (hp <= 0)
+	{
+		Scene* scene = SCENE_MGR.GetCurrScene(); //형변환연산자 쓰기
+		SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
+		if (sceneDev1 != nullptr)
+		{
+			sceneDev1->OnDieEnemy(this);
+			// RemoveGo(enemy);
+			// zombiePool.Return(zombie);
+			// 리무브 해야하니까 씬데브에 죽는처리 함수 만들기
+		}
+	}
+}
+
+// 보류
 bool Enemy::GetFlipX() const
 {
 	return flipX;
