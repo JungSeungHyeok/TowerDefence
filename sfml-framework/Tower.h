@@ -2,6 +2,9 @@
 #include "SpriteGo.h"
 #include "AnimationController.h"
 #include "Enemy.h"
+#include "ObjectPool.h"
+#include "Arrow.h"
+#include "EnemyTable.h"
 
 // 타워도 스프라이트
 // 애니메이션 상태 표현
@@ -31,25 +34,11 @@ protected:
 	AnimationController animation; // 추가
 	Types towerType;
 
-
+	ObjectPool<Enemy> poolEnemys;
+	ObjectPool<Arrow> poolArrows;
 
 	sf::Vector2f direction; // 추가
-
-	//bool isInstalled = false;
-	//bool testHide = true;
-
-	//sf::ConvexShape diamond1;
-	//sf::ConvexShape diamond2;
-	//sf::ConvexShape diamond3;
-	//sf::ConvexShape diamond4;
-	//sf::ConvexShape diamond5;
-	//sf::ConvexShape diamond6;
-	//sf::FloatRect diaBounds;
-	//const float diamondWidth = 35.f;
-	//const float diamondHeight = 35.f; // 마름모 크기
-	
-
-	// bool isHover = false; // 설치 가능한 타일인지 판단
+	float speed = 1000.f;
 
 public:
 
@@ -60,8 +49,6 @@ public:
 
 	virtual void SetPosition(float x, float y);
 	virtual void SetPosition(const sf::Vector2f& p);
-
-	// 겟포지션 추가?
 
 	virtual void Init() override;
 	virtual void Reset() override;
@@ -77,12 +64,12 @@ public:
 	void SetType(Types t);
 	Types GetType() const;
 
-	void TowerAttack(int damage);
-
 	
 
+	void TowerAttack(const sf::Vector2f& position, const sf::Vector2f& look, float dt);
 
 	
+	// const TowerInfo& tower, const MonsterInfo& monster)
 
 
 

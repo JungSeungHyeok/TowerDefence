@@ -159,6 +159,7 @@
     </ClCompile>
     <ClCompile Include="Animation\AnimationController.cpp" />
     <ClCompile Include="Arrow.cpp" />
+    <ClCompile Include="ArrowTable.cpp" />
     <ClCompile Include="DataTables\DataTable.cpp" />
     <ClCompile Include="DataTables\StringTable.cpp" />
     <ClCompile Include="EnemyTable.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Animation\AnimationClip.h" />
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Arrow.h" />
+    <ClInclude Include="ArrowTable.h" />
     <ClInclude Include="DataTables\DataTable.h" />
     <ClInclude Include="DataTables\StringTable.h" />
     <ClInclude Include="EnemyTable.h" />

@@ -7,12 +7,21 @@ class Enemy;
 class Arrow : public SpriteGo
 {
 
+public:
+	enum class Types
+	{
+		Arrow,
+		Wizard_Bullet,
+	};
+	static const int TotalTypes = 2;
+
 protected:
+	Types arrowType;
 
 	sf::Vector2f direction;
-	float speed = 0.f;
-	float range = 0.f;
-	int damage = 0;
+	float speed;
+	float range;
+	//int damage;
 
 	const std::list<Enemy*>* enemys;
 
@@ -21,21 +30,28 @@ protected:
 public:
 	ObjectPool<Arrow>* pool;
 
-	Arrow(const std::string& textureId = "", const std::string& n = "");
-	virtual ~Arrow() override;
+	Arrow(const std::string& textureId = "", const std::string& n = "")
+		:SpriteGo(textureId, n) {}
 
-	void SetEnemyList(const std::list<Enemy*>* list); // 몬스터 리스트
+	virtual ~Arrow() override { Release(); };
+
 
 	void Aiming(const sf::Vector2f& pos, const sf::Vector2f& dir, float speed); // 조준 기존 파이어
 
 	virtual void Init() override;
-	virtual void Release() override;
 	virtual void Reset() override;
-
 	virtual void Update(float dt) override;
+
 	virtual void Draw(sf::RenderWindow& window) override;
 
-	Enemy* MostCloseEnemy(Enemy* enemy);
+	bool Load(const std::string& filePath);
+
+	void SetType(Types t);
+	Types GetType() const;
+
+	void SetEnemyList(const std::list<Enemy*>* list); // 몬스터 리스트
+
+	//Enemy* MostCloseEnemy();
 
 
 };

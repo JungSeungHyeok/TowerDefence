@@ -5,10 +5,11 @@
 #include <sstream>
 #include "Tower.h"
 #include "SpriteGo.h"
+#include "TowerTable.h"
 
 
 class Enemy;
-
+class Arrow;
 // class 스프라이트 이펙트
 class TileMap;
 
@@ -19,9 +20,13 @@ protected:
 	TileMap* tileMap = nullptr;
 	Enemy* enemy = nullptr;
 	Tower* tower = nullptr;
+	Arrow* arrow = nullptr;
 
 	ObjectPool<Enemy> enemyPool;
 	ObjectPool<Tower> towerPool;
+	ObjectPool<Arrow> arrowPool;
+
+	// std::list<Enemy> enemys;
 
 	bool isInstalled = false;
 	bool testHide = true;
@@ -33,7 +38,7 @@ protected:
 	sf::ConvexShape diamond5;
 	sf::ConvexShape diamond6;
 	sf::FloatRect diaBounds;
-
+	
 	const float diamondWidth = 35.f;
 	const float diamondHeight = 35.f; // 마름모 크기
 
@@ -88,25 +93,12 @@ public:
 	void EnemyEndPoint(Enemy* enemy);
 
 	// 타워 관련 , 셋포지션도 추가
-	/*virtual void SetPosition(float x, float y);
-	virtual void SetPosition(const sf::Vector2f& p);*/
-
+	void TowerAttack(const sf::Vector2f& position, const sf::Vector2f& look, float dt);
 
 	void BuildTower(Tower::Types towerType, sf::Vector2f pos);
 
 
-	/*void BuildTower(Tower::Types type);*/
-
-
-
-
-
-
 	void Test();
-
-
-	// sf::Vector2f screenToIsoTileCoords(sf::Vector2f screenCoords, sf::Vector2f tile);
-	// 타일맵으로 옮김
 };
 
 template<typename T>

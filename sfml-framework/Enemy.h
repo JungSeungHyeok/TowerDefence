@@ -66,6 +66,8 @@ protected:
 	Tower* tower = nullptr;
 	SoundGo* hitedSound = nullptr;
 
+	// std::list<Enemy> enemys;
+
 public:
 	Enemy(const std::string& textureId = "", const std::string n = "");
 	virtual~Enemy()override;

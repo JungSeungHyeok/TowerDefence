@@ -6,8 +6,8 @@
 struct EnemyInfo
 {
     Enemy::Types enemyType;
-
     std::string textureId;
+
     float speed;
     int maxHp;
     int hp;
@@ -20,6 +20,8 @@ class EnemyTable : public DataTable
 {
 protected:
     std::unordered_map< Enemy::Types, EnemyInfo > enemyTables;
+
+    // 정보에 따라서 저장하겠다는건데
 
 public:
     EnemyTable() : DataTable(DataTable::Ids::Enemy) {};

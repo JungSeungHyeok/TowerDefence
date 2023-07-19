@@ -21,17 +21,6 @@ void Tower::SetPosition(const sf::Vector2f& p)
 
 void Tower::Init()
 {
-	//RESOURCE_MGR.Load(ResourceTypes::Texture, "Towers/Archer/archer_level_1.png");
-
-	/*RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "animations/Bow_Idle.csv");
-	RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "animations/Bow_Arrow.csv");
-	RESOURCE_MGR.Load(ResourceTypes::AnimationClip, "animations/Archer_Tower.csv");
-
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Bow_Idle.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Bow_Arrow.csv"));
-	animation.AddClip(*RESOURCE_MGR.GetAnimationClip("animations/Archer_Tower.csv"));*/
-
-	// attackTimer = attackRate;
 
 	animation.SetTarget(&sprite);
 	SetOrigin(Origins::BC);
@@ -52,6 +41,16 @@ void Tower::Update(float dt)
 {
 	animation.Update(dt);
 	SpriteGo::Update(dt);
+
+
+	// 애로우 안에서 애니미 받고
+	// 타워 -> 화살 -> 애니미
+
+	position += direction * speed * dt;
+	sprite.setPosition(position);
+
+	
+
 }
 
 void Tower::Draw(sf::RenderWindow& window)
@@ -92,27 +91,11 @@ bool Tower::Load(const std::string& filePath)
 	return true;
 }
 
-//void Tower::InstallTower(const sf::Vector2f& isoTileCoords, const sf::Vector2f& tileSize)
-//{
-//
-//	if (!isInstalled)
-//	{
-//		sf::Vector2f tileCenter(isoTileCoords.x * tileSize.x + tileSize.x / 2.0f, isoTileCoords.y * tileSize.y + tileSize.y / 2.0f);
-//		SetPosition(tileCenter);
-//		isInstalled = true;
-//		// 타일 중심 설치 추가
-//
-//
-//		//SetPosition(isoTileCoords.x * tileSize.x, isoTileCoords.y * tileSize.y);
-//		//isInstalled = true;
-//	}
-//}
-
 void Tower::SetType(Types t)
 {
 	towerType = t;
 
-	const TowerInfo& info = DATATABLE_MGR.Get<TowerTable>(DataTable::Ids::Tower)->Get(t);
+	const TowerInfo& info = DATATABLE_MGR.Get<TowerTable>(DataTable::Ids::Tower)->Get(t); // 내가 이뜻을 모르니까 거의 복붙이지
 
 	int index = (int)towerType;
 	textureId = info.textureId; // 초기화 할 수 있께?
@@ -123,17 +106,18 @@ Tower::Types Tower::GetType() const
 	return towerType;
 }
 
-void Tower::TowerAttack(int damage)
-{
-	
-	//if (// 추후 라운드 종료 불값 조건식 들어오면 리턴)
-	//{
-	//	return;
-	//}
-	// hp = std::max(hp - damdge, 0);
 
 
-}
+
+
+//void Tower::TowerAttack(const sf::Vector2f& position, const sf::Vector2f& look, float dt)
+//{
+//
+//
+//
+//}
+
+
 
 
 

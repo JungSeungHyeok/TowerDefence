@@ -13,6 +13,7 @@
 #include "Scene.h"
 #include "SceneDev1.h"
 
+#include "DataTableMgr.h" // 18일 저녁에 집에서 추가
 
 Enemy::Enemy(const std::string& textureId, const std::string n)
 	:SpriteGo(textureId, n)
@@ -34,7 +35,16 @@ void Enemy::Init()
 
 void Enemy::Reset()
 {
+	// 리셋 1라운드 몹 할거면 Types::Ufo1 이렇게 해도 된다
+	// 18일 저녁 추가
+	// 테이블을 통째로가져온다
+
 	SpriteGo::Reset();
+
+	auto info = DATATABLE_MGR.Get<EnemyTable>(DataTable::Ids::Enemy)->Get(enemyType);
+
+	speed = info.speed;
+	maxHp = info.maxHp;
 	hp = maxHp;
 	currPoint = point1;
 }
@@ -48,7 +58,12 @@ void Enemy::Update(float dt)
 {
 	SpriteGo::Update(dt);
 
-	speed = 130.f;
+	//speed = 130.f;
+
+
+
+
+
 
 	float distance = Utils::Distance(currPoint, position);
 
@@ -154,7 +169,6 @@ void Enemy::SetType(Types t)
 
 	int index = (int)enemyType;
 	textureId = info.textureId; // 초기화 할 수 있께?
-
 	/*textureId = info.speed;
 	textureId = info.maxHp;*/
 
@@ -172,7 +186,7 @@ Enemy::Types Enemy::GetType() const
 void Enemy::OnHit(int damage)
 {
 	hp -= damage;
-	hitedSound->sound.play(); // 맞은 다음에
+	//hitedSound->sound.play(); // 맞은 다음에
 
 	if (hp <= 0)
 	{
@@ -195,6 +209,11 @@ void Enemy::SetPlayer(Tower* tower)
 
 void Enemy::OnTakeDamege(int damage)
 {
+	// 이렇게 해봤자 csv값은 아니잖아
+	// (towerType& tower) 이런 느낌으로 인자를 받아온게 아니라
+	// 근데 좀비테이블도 이 형식이긴해 / 뭐 다른거 없고
+	
+
 	hp -= damage; // hitedSound->sound.play(); 사운드는 나중에
 
 	if (hp <= 0)
@@ -230,3 +249,4 @@ void Enemy::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);
 }
+

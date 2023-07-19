@@ -16,7 +16,7 @@ public:
 
 	void LoadAll();
 	void ReleaseAll();
-
+	
 	template <typename T>
 	T* Get(DataTable::Ids id) const;
 };
@@ -28,6 +28,9 @@ inline T* DataTableMgr::Get(DataTable::Ids id) const
 	if (find == tables.end())
 		return nullptr;
 	return dynamic_cast<T*>(find->second);
+	// 펄스트 키값 ID같은거 ex)0,1,2,3,4
+	// 
+	// 세컨드는 벨류 ex) 스피드, 체력,
 }
 
 #define DATATABLE_MGR (DataTableMgr::Instance())

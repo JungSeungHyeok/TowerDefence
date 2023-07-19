@@ -1,14 +1,6 @@
 #include "stdafx.h"
 #include "Arrow.h"
-
-Arrow::Arrow(const std::string& textureId, const std::string& n)
-	:SpriteGo(textureId, n)
-{
-}
-
-Arrow::~Arrow()
-{
-}
+#include "ArrowTable.h"
 
 void Arrow::SetEnemyList(const std::list<Enemy*>* list)
 {
@@ -26,7 +18,7 @@ void Arrow::Aiming(const sf::Vector2f& pos, const sf::Vector2f& dir, float speed
 	direction = dir;
 	this->speed = speed;
 
-
+	//SetActive(true);
 }
 
 void Arrow::Init()
@@ -35,55 +27,22 @@ void Arrow::Init()
 	SetOrigin(Origins::MC);
 }
 
-void Arrow::Release()
-{
-	SpriteGo::Release();
-}
-
 void Arrow::Reset()
 {
 	SpriteGo::Reset();
+	SetOrigin(origin);
+	sortLayer = 7;
 }
 
 void Arrow::Update(float dt)
 {
+
 	SpriteGo::Update(dt);
 	// 타워에서 제일 가까운 몬스터 겟포지션
 	// 룩으로 애니메이션 쳐다보게하고
 	// 맞으면 데미지주고
 
-	
-	for (const auto& enemy : *enemys) //리스트
-	{
-		float distance = Utils::Distance(GetPosition(), enemy->GetPosition());
 
-
-		if (distance >= range)
-		{
-
-
-		}
-
-
-
-
-
-
-	}
-
-	//float distance = Utils::Distance(currPoint, position);
-
-	//direction = Utils::Normalize(currPoint - position); // 방향 구하고
-
-	////sprite.setRotation(Utils::Angle(direction)); // 추가 // 이미지가 움직인다
-
-	//position += direction * speed * dt;
-	//sprite.setPosition(position); // 추가
-
-
-
-	//position += direction * speed * dt;
-	//sprite.setPosition(position);
 
 }
 
@@ -92,34 +51,45 @@ void Arrow::Draw(sf::RenderWindow& window)
 	SpriteGo::Draw(window);
 }
 
-Enemy* Arrow::MostCloseEnemy(Enemy* enemy)
+bool Arrow::Load(const std::string& filePath)
 {
-	//Enemy* mostCloseEnemy = nullptr;
-	//float minDistance = std::numeric_limits<float>::max();
-
-	//// Get the position of the tower
-	//sf::Vector2f towerPosition = GetPosition();
-
-	//// Loop through the enemy pool to find the closest enemy
-	//for (const auto& enemy : enemyObjectPool)
-	//{
-	//	// Check if the enemy is active and within the tower's attack range
-	//	if (enemy.IsActive() && IsWithinRange(towerPosition, enemy.GetPosition()))
-	//	{
-	//		// Calculate the distance between the tower and the enemy
-	//		float distance = CalculateDistance(towerPosition, enemy.GetPosition());
-
-	//		// Update the closest enemy if a closer one is found
-	//		if (distance < minDistance)
-	//		{
-	//			minDistance = distance;
-	//			mostCloseEnemy = &enemy;
-	//		}
-	//	}
-	//}
-
-
-
-
-	return nullptr;
+	return true;
 }
+
+void Arrow::SetType(Types t)
+{
+	arrowType = t;
+
+	const ArrowInfo& info = DATATABLE_MGR.Get<ArrowTable>(DataTable::Ids::Arrow)->Get(t);
+
+	int index = (int)arrowType;
+	textureId = info.textureId; // 초기화 할 수 있께?
+}
+
+Arrow::Types Arrow::GetType() const
+{
+	return arrowType;
+}
+
+//Enemy* Arrow::MostCloseEnemy()
+//{
+//	Enemy* mostCloseEnemy = nullptr;
+//
+//	float minDistance = std::numeric_limits<float>::max();
+//	// 이게 가장 가까운 거리고
+//
+//	sf::Vector2f towerPosition = GetPosition();
+//
+//	for (const auto& enemy : *enemys)
+//	{
+//		float distance = Utils::Distance(GetPosition(), enemy->GetPosition()); // 거리
+//
+//		if (distance >= range)
+//		{
+//			//SetActive(false);
+//			//return;
+//		}
+//	}
+//
+//	return mostCloseEnemy;
+//}

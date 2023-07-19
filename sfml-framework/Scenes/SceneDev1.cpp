@@ -10,17 +10,13 @@
 
 #include "Enemy.h"
 #include "Tower.h"
+#include "Arrow.h"
+
+
 
 SceneDev1::SceneDev1() : Scene(SceneId::Dev1), tower(nullptr)
 {
-	/*resources.push_back(std::make_tuple(ResourceTypes::Texture, "Towers/Archer/archer_level_1.png"));*/
-
 	resourceListPath = "scripts/SceneDev1ResourceList.csv";
-
-	// csv로 보우 애니메이션만 추가하고
-	// 타워 기본 이미지는 스프라이트 png 그냥 때려박고
-	// csv로 보우 애니메이션만 추가하고
-	// 타워 기본 이미지는 스프라이트 png 그냥 때려박고
 }
 
 void SceneDev1::Init()
@@ -37,10 +33,6 @@ void SceneDev1::Init()
 
 	tileMap = (TileMap*)AddGo(new TileMap("graphics/grass.png", "Tile Map"));
 
-	
-	// tower addGo 제외
-
-
 	// 몬스터 오브젝트풀
 
 	enemyPool.OnCreate = [this](Enemy* enemy)
@@ -50,22 +42,21 @@ void SceneDev1::Init()
 	};
 	enemyPool.Init();
 
-
 	// 타워 오브젝트풀
 
 	towerPool.OnCreate = [this](Tower* tower) {};
 	towerPool.Init();
 
+	// 애로우 오브젝트풀
+
+	arrowPool.OnCreate = [this](Arrow* arrow) {};
+	arrowPool.Init();
 
 
 	for (auto go : gameObjects)
 	{
 		go->Init();
 	}
-
-	/*tower->SetOrigin(Origins::MC);
-	tower->SetPosition(-500, 200);
-	tower->sortLayer = 5;*/
 
 	tileMap->Load("map/map2.csv");
 	tileMap->SetOrigin(Origins::MC);
@@ -168,11 +159,14 @@ void SceneDev1::Update(float dt)
 	sf::Vector2f uiMousePos = ScreenToUiPos(mousePos);
 
 	// 마우스 좌표 테스트
-	std::cout << "마우스x: " << uiMousePos.x << "마우스y: "<< uiMousePos.y << std::endl;
+	//std::cout << "마우스x: " << uiMousePos.x << "마우스y: "<< uiMousePos.y << std::endl;
 	// 마우스 좌표 테스트
 
 
+	
 	Test();
+
+	
 
 	bool isHover = false;
 	bool prevHover = isHover;
@@ -354,244 +348,6 @@ void SceneDev1::Update(float dt)
 	}
 
 
-
-
-
-		//if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
-		//{
-		//	BuildTower(Tower::Types::ArcherTower1, { 586, 197 });
-		//	towerBuildCheck = !towerBuildCheck;
-		//}
-		//else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
-		//{
-		//	BuildTower(Tower::Types::ArcherTower2, { 586, 197 });
-		//	towerBuildCheck = !towerBuildCheck;
-		//}
-		//else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
-		//{
-		//	BuildTower(Tower::Types::ArcherTower3, { 586, 197 });
-		//	towerBuildCheck = !towerBuildCheck;
-		//}
-		//else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
-		//{
-		//	BuildTower(Tower::Types::WizardTower1, { 586, 197 });
-		//	towerBuildCheck = !towerBuildCheck;
-
-		//}
-		//else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
-		//{
-		//	BuildTower(Tower::Types::WizardTower2, { 586, 197 });
-		//	towerBuildCheck = !towerBuildCheck;
-		//}
-		//else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num6))
-		//{
-		//	BuildTower(Tower::Types::WizardTower3, { 586, 197 });
-		//	towerBuildCheck = !towerBuildCheck;
-		//}
-		//
-
-		////if (INPUT_MGR.GetMouseButtonUp(sf::Mouse::Left))
-		////{
-		////	towerBuildCheck = !towerBuildCheck;;
-		////}
-
-
-
-		//{
-		//	diaBounds = diamond2.getGlobalBounds();
-		//	isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y);
-
-		//	if (isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y)
-		//		&& INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
-		//	{
-		//		std::cout << "충돌체크2" << std::endl;
-		//	}
-		//	if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower1, { 857, 248 });
-		//		//towerBuildCheck = !towerBuildCheck;
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower2, { 857, 248 });
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower3, { 857, 248 });
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower1, { 857, 248 });
-
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower2, { 857, 248 });
-
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num6))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower3, { 857, 248 });
-
-		//	}
-		//}
-
-		//{
-		//	diaBounds = diamond3.getGlobalBounds();
-		//	isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y);
-
-		//	if (isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y)
-		//		&& INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
-		//	{
-		//		std::cout << "충돌체크3" << std::endl;
-		//	}
-		//	if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower1, { 632, 376 });
-		//		//towerBuildCheck = !towerBuildCheck;
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower2, { 632, 376 });
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower3, { 632, 376 });
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower1, { 632, 376 });
-
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower2, { 632, 376 });
-
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num6))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower3, { 632, 376 });
-
-		//	}
-		//}
-
-		//{
-		//	diaBounds = diamond4.getGlobalBounds();
-		//	isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y);
-
-		//	if (isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y)
-		//		&& INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
-		//	{
-		//		std::cout << "충돌체크4" << std::endl;
-		//	}
-		//	if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower1, { 902, 428 });
-		//		//towerBuildCheck = !towerBuildCheck;
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower2, { 902, 428 });
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower3, { 902, 428 });
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower1, { 902, 428 });
-
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower2, { 902, 4285 });
-
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num6))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower3, { 902, 428 });
-
-		//	}
-		//}
-
-		//{
-		//	diaBounds = diamond5.getGlobalBounds();
-		//	isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y);
-
-		//	if (isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y)
-		//		&& INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
-		//	{
-		//		std::cout << "충돌체크5" << std::endl;
-		//	}
-		//	if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower1, { 767, 505 });
-		//		//towerBuildCheck = !towerBuildCheck;
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower2, { 767, 505 });
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower3, { 767, 505 });
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower1, { 767, 505 });
-
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower2, { 767, 505 });
-
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num6))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower3, { 767, 505 });
-
-		//	}
-		//}
-
-		//{
-		//	diaBounds = diamond6.getGlobalBounds();
-		//	isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y);
-
-		//	if (isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y)
-		//		&& INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
-		//	{
-		//		std::cout << "충돌체크6" << std::endl;
-		//	}
-		//	if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower1, { 1082, 479 });
-		//		//towerBuildCheck = !towerBuildCheck;
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower2, { 1082, 479 });
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num3))
-		//	{
-		//		BuildTower(Tower::Types::ArcherTower3, { 1082, 479 });
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num4))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower1, { 1082, 479 });
-
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower2, { 1082, 479 });
-
-		//	}
-		//	else if (!towerBuildCheck && INPUT_MGR.GetKeyDown(sf::Keyboard::Num6))
-		//	{
-		//		BuildTower(Tower::Types::WizardTower3, { 1082, 479 });
-
-		//	}
-		//}
-
 	
 }
 
@@ -616,7 +372,7 @@ void SceneDev1::SpawnEnemys(int count, sf::Vector2f pos) // 레디우스
 	for (int i = 0; i < count; ++i)
 	{
 		Enemy* enemy = enemyPool.Get();
-		enemy->SetPosition(352,-10);
+		enemy->SetPosition(352, -10);
 		AddGo(enemy);
 	}
 }
@@ -675,6 +431,11 @@ void SceneDev1::EnemyEndPoint(Enemy* enemy)
 	enemyPool.Return(enemy);
 }
 
+
+
+
+
+
 //void SceneDev1::SetPosition(float x, float y)
 //{
 //	SpriteGo::SetPosition(x, y);
@@ -685,6 +446,63 @@ void SceneDev1::EnemyEndPoint(Enemy* enemy)
 //	SpriteGo::SetPosition(p);
 //}
 
+
+
+
+
+
+void SceneDev1::TowerAttack(const sf::Vector2f& position, const sf::Vector2f& look, float dt)
+{
+
+	// 오브젝트풀은 몬스터, 타워, 화살 모두 썼다.
+	// 체력, 데미지, 스피드 등은 모두 csv 엑셀 파일에 명시되어있다.
+	// 타워 -> 애니미리스트 들고있음
+	// 
+	// 애로우 -> 애니미리스트 이것도 되긴하는데 방식이다름
+	// 
+	// 애니미 -> 애로우리스트(불렛)
+
+	// 1. 애로우는 타워의 겟포지션에서 출발한다.
+	// 2. 애로우의 목적지는 몬스터의 겟 포지션이다.
+	// 3. 애로우는 몬스터의 포지션과 겹치면 사라진다.
+
+	Arrow* arrow = arrowPool.Get();
+	
+	
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::A))
+	{
+		std::cout << "Test A키" << std::endl;
+		//arrow->SetPosition(500, 300);
+		//arrow->Reset();
+		arrow->Aiming(position, look, 1000.f);
+		AddGo(arrow);
+	}
+
+
+	//float distance = Utils::Distance(this->tower->sprite.getPosition(), this->enemy->sprite.getPosition());
+
+	
+
+
+	
+
+
+	 // csv값 정보 받아서 적용
+
+
+	//arrow->SetType(arrowType);
+	//arrow->SetPosition(pos);
+	//arrow->Reset();
+
+
+	
+	//	arrow->Aiming(); // 인자 3개0
+
+
+}
+
+
+
 void SceneDev1::BuildTower(Tower::Types towerType, sf::Vector2f pos)
 {
 	Tower* tower = towerPool.Get();
@@ -693,87 +511,36 @@ void SceneDev1::BuildTower(Tower::Types towerType, sf::Vector2f pos)
 	tower->Reset();
 	AddGo(tower);
 
+	
 }
 
 void SceneDev1::Test()
 {
+
+
+	sf::Vector2f popo;
+	sf::Vector2f loooook;
+	TowerAttack(popo, loooook, 10.f);
+
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E))
 	{
 		SpawnEnemys(1, {0,0});
+		std::cout << "몬스터 생성!" << std::endl;
 	}
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::C))
 	{
 		ClearObjectPool(enemyPool);
 		ClearObjectPool(towerPool);
+		ClearObjectPool(arrowPool);
 	}
 
-	//if (INPUT_MGR.GetKeyDown(sf::Keyboard::Space))
-	//{
-	//	BuildTower(Tower::Types::ArcherTower2, { 561, 134 });
-	//}
-
-
-	
-
-
-	/*{
-		diaBounds = diamond3.getGlobalBounds();
-		isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y);
-
-		if (isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y)
-			&& INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
-		{
-			Tower tower;
-			animation.Play("Archer_Tower");
-			tower.SetPosition(607, 313);
-
-			std::cout << "충돌체크3" << std::endl;
-		}
-	}
-
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
 	{
-		diaBounds = diamond4.getGlobalBounds();
-		isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y);
 
-		if (isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y)
-			&& INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
-		{
-			animation.Play("Archer_Tower");
-			SetPosition(877, 365);
 
-			std::cout << "충돌체크4" << std::endl;
-		}
+		//TowerAttack(towerPool, enemyPool);
 	}
-
-	{
-		diaBounds = diamond5.getGlobalBounds();
-		isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y);
-
-		if (isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y)
-			&& INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
-		{
-			animation.Play("Archer_Tower");
-			SetPosition(742, 442);
-
-			std::cout << "충돌체크5" << std::endl;
-		}
-	}
-
-	{
-		diaBounds = diamond6.getGlobalBounds();
-		isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y);
-
-		if (isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y)
-			&& INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
-		{
-			animation.Play("Archer_Tower");
-			SetPosition(1057, 416);
-
-			std::cout << "충돌체크6" << std::endl;
-		}
-	}*/
-
 
 }
 

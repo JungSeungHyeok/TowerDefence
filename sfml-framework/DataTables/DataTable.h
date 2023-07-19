@@ -9,6 +9,7 @@ public:
 		String,
 		Enemy,
 		Tower,
+		Arrow, // 모든 투사체를 Arrow
 	};
 
 	DataTable(const DataTable& other) = delete;
