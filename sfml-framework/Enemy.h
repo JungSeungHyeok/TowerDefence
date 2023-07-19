@@ -29,6 +29,9 @@ protected:
 	Types enemyType;
 
 
+
+	const std::list<Tower*>* towers;
+
 	// 포인트 1,23,4,5는 고정값 꺽이는 값을 처음에 넣어두고
 	// 포인트 1에 도착했으면 커렌트 포인트에 2를 넣어준다
 	//
@@ -79,11 +82,11 @@ public:
 	virtual void Update(float dt)override;
 	virtual void Draw(sf::RenderWindow& window)override;
 
-	void OnHit(int damage);
+	// void OnHit(int damage);
 
 	void SetType(Types t);
 	Types GetType() const;
-
+	
 
 	// 정면 벽? void SetWall(); 
 	void SetSound(SoundGo* hitSound) { hitedSound = hitSound; }
@@ -92,10 +95,15 @@ public:
 	// 몬스터가 타워한테 맞는부분
 	void SetPlayer(Tower* tower);
 	void OnTakeDamege(int damage);
-
+	void GetSearchTower();
 
 	bool GetFlipX() const;
 	void SetFlipX(bool flip);
+
+
+	void SetTowerList(const std::list<Tower*>* list);
+
+
 
 };
 

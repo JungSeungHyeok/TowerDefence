@@ -4,6 +4,7 @@
 #include "EnemyTable.h"
 #include "TowerTable.h"
 #include "ArrowTable.h"
+#include "ObjectTable.h"
 
 void DataTableMgr::LoadAll()
 {
@@ -11,6 +12,7 @@ void DataTableMgr::LoadAll()
 	tables.insert({ DataTable::Ids::Enemy, new EnemyTable() });
 	tables.insert({ DataTable::Ids::Tower, new TowerTable() }); // 타워 테이블 추가
 	tables.insert({ DataTable::Ids::Arrow, new ArrowTable() }); // 화살 테이블
+	tables.insert({ DataTable::Ids::Object, new ObjectTable() }); // 옵젝 테이블
 
 	//tables.insert({ DataTable::Ids::Enemy, new TowerTable() });
 

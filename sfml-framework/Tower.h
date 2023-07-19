@@ -33,15 +33,26 @@ public:
 protected:
 	AnimationController animation; // 추가
 	Types towerType;
+	ObjectPool<Arrow>* poolArrows;
+	Tower* tower;
+	Enemy* enemy;
+	Arrow* arrow;
 
-	ObjectPool<Enemy> poolEnemys;
-	ObjectPool<Arrow> poolArrows;
+	const std::list<Enemy*>* enemys;
+	// 갖고 있을 필요가 있나
+
+	//ObjectPool<Enemy> poolEnemys;
+	
 
 	sf::Vector2f direction; // 추가
-	float speed = 1000.f;
+	int damage;
+	int range;
+	float attackRate;
+	float arrowSpeed;
+	int price;
+
 
 public:
-
 	Tower(const std::string& textureId = "", const std::string& n = "")
 		:SpriteGo(textureId, n) {}
 
@@ -64,9 +75,27 @@ public:
 	void SetType(Types t);
 	Types GetType() const;
 
-	
+	void GetEnemy(Enemy* enemy) {
+		if(this->enemy==nullptr)
+			this->enemy = enemy; }
 
-	void TowerAttack(const sf::Vector2f& position, const sf::Vector2f& look, float dt);
+	void LostEnemy();
+	
+	void SetEnemyList(const std::list<Enemy*>* list);
+
+	float GetRange() { return range; }
+
+	void GetArrowPool(ObjectPool<Arrow>* pool)
+	{
+		this->poolArrows = pool;
+	}
+
+
+
+	void TowerAttack();
+
+
+
 
 	
 	// const TowerInfo& tower, const MonsterInfo& monster)

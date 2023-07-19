@@ -7,19 +7,12 @@ void Arrow::SetEnemyList(const std::list<Enemy*>* list)
 	enemys = list;
 }
 
-void Arrow::Aiming(const sf::Vector2f& pos, const sf::Vector2f& dir, float speed)
-{	// 타워에서 제일 가까운 몬스터 겟포지션
-	// 룩으로 애니메이션 쳐다보게하고
-	// 맞으면 데미지주고
-
-	// sprite.setRotation(Utils::Angle(dir)); 이건 잘모름
-
-	SetPosition(pos);
-	direction = dir;
-	this->speed = speed;
-
-	//SetActive(true);
-}
+//void Arrow::Aiming(const sf::Vector2f& pos, const sf::Vector2f& dir, float speed)
+//{
+//	SetPosition(pos);
+//	direction = dir;
+//	this->speed = speed;
+//}
 
 void Arrow::Init()
 {
@@ -30,7 +23,11 @@ void Arrow::Init()
 void Arrow::Reset()
 {
 	SpriteGo::Reset();
-	SetOrigin(origin);
+	auto info = DATATABLE_MGR.Get<ArrowTable>(DataTable::Ids::Arrow)->Get(Types::Arrow);
+
+	speed = info.speed;
+	range = info.range;
+	damage = info.damage;
 	sortLayer = 7;
 }
 
@@ -38,11 +35,32 @@ void Arrow::Update(float dt)
 {
 
 	SpriteGo::Update(dt);
-	// 타워에서 제일 가까운 몬스터 겟포지션
-	// 룩으로 애니메이션 쳐다보게하고
-	// 맞으면 데미지주고
 
+	range -= speed * dt;
+	if (range < 0.f)
+	{
+		SCENE_MGR.GetCurrScene()->RemoveGo(this);
+		pool->Return(this);
+		return;
+	}
 
+	position += direction * speed * dt;
+	sprite.setPosition(position);
+
+	if (enemys != nullptr)
+	{
+		for (Enemy* enemy : *enemys)
+		{
+			if (sprite.getGlobalBounds().intersects(enemy->sprite.getGlobalBounds()))
+			{
+				enemy->OnTakeDamege(damage);
+
+				SCENE_MGR.GetCurrScene()->RemoveGo(this);
+				pool->Return(this);
+				break;
+			}
+		}
+	}
 
 }
 
@@ -70,6 +88,25 @@ Arrow::Types Arrow::GetType() const
 {
 	return arrowType;
 }
+
+void Arrow::SetRange(float range)
+{
+	this->range = range;
+}
+
+void Arrow::SetArrowSpeed(float speed)
+{
+	this->speed = speed;
+}
+
+void Arrow::SetDamage(int damage)
+{
+	this->damage = damage;
+}
+
+
+
+
 
 //Enemy* Arrow::MostCloseEnemy()
 //{

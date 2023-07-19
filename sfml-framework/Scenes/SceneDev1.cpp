@@ -42,15 +42,31 @@ void SceneDev1::Init()
 	};
 	enemyPool.Init();
 
-	// 타워 오브젝트풀
 
-	towerPool.OnCreate = [this](Tower* tower) {};
-	towerPool.Init();
 
 	// 애로우 오브젝트풀
 
-	arrowPool.OnCreate = [this](Arrow* arrow) {};
+	arrowPool.OnCreate = [this](Arrow* arrow)
+	{
+		Arrow::Types arrowType = (Arrow::Types)Utils::RandomRange(0, Arrow::TotalTypes - 1);
+		arrow->SetType(arrowType);
+	};
 	arrowPool.Init();
+
+	// 타워 오브젝트풀
+
+	towerPool.OnCreate = [this](Tower* tower) {
+		tower->GetArrowPool(&arrowPool);
+	};
+	towerPool.Init();
+
+	// 오브젝트 오브젝트풀
+	objectPool.OnCreate = [this](Object* object)
+	{
+		Object::Types objectType = (Object::Types)Utils::RandomRange(0, Object::TotalTypes - 1);
+		object->SetType(objectType);
+	};
+	objectPool.Init();
 
 
 	for (auto go : gameObjects)
@@ -183,22 +199,7 @@ void SceneDev1::Update(float dt)
 		sf::Vector2f isoTileCoords = tile.screenToIsoTileCoords(uiMousePos, sf::Vector2f(tileSize.x, tileSize.y));
 
 		std::cout << "Clicked Isometric Tile: (" << isoTileCoords.x << ", " << isoTileCoords.y << ")" << std::endl;
-
 	}
-
-
-
-
-
-	TileMap tile;
-
-	//sf::Vector2f tileSize = { 90, 85 };
-	//sf::Vector2f mousePos = INPUT_MGR.GetMousePos();
-	//sf::Vector2f mousePosition = INPUT_MGR.GetMousePos();
-	//sf::Vector2f uiMousePos = SCENE_MGR.GetCurrScene()->ScreenToUiPos(mousePos);
-
-	/*sf::Vector2f isoTileCoords = tile.screenToIsoTileCoords(uiMousePos, sf::Vector2f(tileSize.x, tileSize.y));*/
-
 
 
 	// 마름모 충돌체크
@@ -367,6 +368,84 @@ void SceneDev1::Draw(sf::RenderWindow& window)
 	}
 }
 
+void SceneDev1::BuildObject(int count, sf::Vector2f pos)
+{
+	// 45, 76
+	// 91, 100 우 대각 // 46, 24 차이
+	// 145, 76 오른쪽 // x값 90차이
+	// 45, 127 바로아래 // y값 51차이
+
+	sf::Vector2f objPos = { 45, 56 };
+
+	sf::Vector2f tileSize = { 90.f, 85.f };
+	
+	sf::Vector2f currPos = objPos;
+
+	float widthDifference = tileSize.x * 0.5f;
+	float heightDifference = tileSize.y * 0.3025f;
+
+	for (int i = 0; i < count; ++i)
+	{
+		Object* object = objectPool.Get();
+		
+		object->SetPosition(currPos.x, currPos.y);
+		for (int j = 0; j < count; ++j)
+		{
+			currPos.x += tileSize.x;
+			//object->SetPosition(currPos.x, objPos.y);
+		}
+		
+		currPos.x = objPos.x; // 사실상 스타트 포즈
+
+		if (i % 2 == 0)
+		{
+			currPos.x += widthDifference;
+			//object->SetPosition(currPos.x, objPos.y);
+		}
+	
+		currPos.y += heightDifference;
+		//object->SetPosition(currPos.x, currPos.y);
+		// 변경
+		AddGo(object);
+	}
+	
+
+
+	//
+	//for (int i = 0; i < 5; i++)
+	//{
+	//	Object* object = objectPool.Get();
+	//	object->SetPosition(objPos.x * (i), objPos.y);
+	//	objPos.x += 51;
+	//}
+	//
+	//AddGo(object);
+
+
+
+
+
+	//sf::Vector2f startPos = { 45, 56 };
+	//float heightDifference = objPos.y * 0.3025f;
+
+	//for (int i = 0; i < 3; ++i)
+	//{
+	//	Object* object = objectPool.Get();
+	//	object->SetPosition(objPos.x, objPos.y * i);
+
+	//	if (i % 10 == 0)
+	//	{
+	//		//break;
+	//	}
+
+	//	//objPos.x += 80;
+	//	//objPos.y += 50;
+	//	AddGo(object);
+	//}
+
+
+}
+
 void SceneDev1::SpawnEnemys(int count, sf::Vector2f pos) // 레디우스
 {
 	for (int i = 0; i < count; ++i)
@@ -431,6 +510,16 @@ void SceneDev1::EnemyEndPoint(Enemy* enemy)
 	enemyPool.Return(enemy);
 }
 
+const std::list<Enemy*>* SceneDev1::GetEnemyList() const
+{
+	return &enemyPool.GetUseList();
+}
+
+const std::list<Tower*>* SceneDev1::GetTowerList() const
+{
+	return &towerPool.GetUseList();
+}
+
 
 
 
@@ -451,8 +540,12 @@ void SceneDev1::EnemyEndPoint(Enemy* enemy)
 
 
 
-void SceneDev1::TowerAttack(const sf::Vector2f& position, const sf::Vector2f& look, float dt)
+void SceneDev1::TowerAttack()
 {
+
+
+
+
 
 	// 오브젝트풀은 몬스터, 타워, 화살 모두 썼다.
 	// 체력, 데미지, 스피드 등은 모두 csv 엑셀 파일에 명시되어있다.
@@ -466,26 +559,22 @@ void SceneDev1::TowerAttack(const sf::Vector2f& position, const sf::Vector2f& lo
 	// 2. 애로우의 목적지는 몬스터의 겟 포지션이다.
 	// 3. 애로우는 몬스터의 포지션과 겹치면 사라진다.
 
-	Arrow* arrow = arrowPool.Get();
+	//Arrow* arrow = arrowPool.Get();
 	
 	
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::A))
-	{
-		std::cout << "Test A키" << std::endl;
-		//arrow->SetPosition(500, 300);
-		//arrow->Reset();
-		arrow->Aiming(position, look, 1000.f);
-		AddGo(arrow);
-	}
+	//if (INPUT_MGR.GetKeyDown(sf::Keyboard::A))
+	//{
+	//	std::cout << "Test A키" << std::endl;
+	//	//arrow->SetPosition(500, 300);
+	//	//arrow->Reset();
+	//	arrow->Aiming(position, look, 1000.f);
+	//	AddGo(arrow);
+	//}
 
 
 	//float distance = Utils::Distance(this->tower->sprite.getPosition(), this->enemy->sprite.getPosition());
 
 	
-
-
-	
-
 
 	 // csv값 정보 받아서 적용
 
@@ -511,16 +600,35 @@ void SceneDev1::BuildTower(Tower::Types towerType, sf::Vector2f pos)
 	tower->Reset();
 	AddGo(tower);
 
-	
+	std::cout << tower->GetPosition().x << " , " << tower->GetPosition().y << std::endl;
+}
+
+void SceneDev1::SpawnArrows(/*Arrow::Types arrowType, */int count, sf::Vector2f pos)
+{
+
+	//Arrow* arrow = arrowPool.Get();
+	//arrow->SetType(arrowType);
+	//arrow->SetPosition(pos);
+	//arrow->Reset();
+	//AddGo(arrow);
+
+
+	for (int i = 0; i < count; ++i)
+	{
+		Arrow* arrow = arrowPool.Get();
+		arrow->SetPosition(352, 200);
+		AddGo(arrow);
+	}
+
 }
 
 void SceneDev1::Test()
 {
 
 
-	sf::Vector2f popo;
-	sf::Vector2f loooook;
-	TowerAttack(popo, loooook, 10.f);
+	//sf::Vector2f popo;
+	//sf::Vector2f loooook;
+	//TowerAttack(popo, loooook, 10.f);
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E))
 	{
@@ -533,14 +641,47 @@ void SceneDev1::Test()
 		ClearObjectPool(enemyPool);
 		ClearObjectPool(towerPool);
 		ClearObjectPool(arrowPool);
+		ClearObjectPool(objectPool);
+
+		std::cout << "삭제 완료!" << std::endl;
 	}
 
-	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Num5))
+	if (INPUT_MGR.GetKeyDown(sf::Keyboard::O))
 	{
+		//sf::Vector2f objDir = { 300, 400 };
 
+		BuildObject(25, { 0,0 });
 
-		//TowerAttack(towerPool, enemyPool);
+		//for (int i = 0; i < 20; i++)
+		//{
+		//	BuildObject(1, { 0,0 });
+		//	//objDir.y += 80;
+		//}
+
+		std::cout << "오브젝트 생성!" << std::endl;
 	}
+
+	//if (INPUT_MGR.GetKeyDown(sf::Keyboard::A))
+	//{
+	//	SpawnArrows(1, { 0,0 });
+	//	std::cout << "화살 생성!" << std::endl;
+	//}
+
+
+	/*if (INPUT_MGR.GetKeyDown(sf::Keyboard::A))
+	{
+		Arrow* arrow = arrowPool.Get();
+		arrow->Aiming({ 0,0 }, {0, 0}, 1000.f);
+
+		Scene* scene = SCENE_MGR.GetCurrScene();
+		SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
+		if (sceneDev1 != nullptr)
+		{
+			arrow->SetEnemyList(sceneDev1->GetEnemyList());
+			sceneDev1->AddGo(arrow);
+		}
+	}*/
+
 
 }
 

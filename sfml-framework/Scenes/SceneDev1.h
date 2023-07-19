@@ -6,6 +6,7 @@
 #include "Tower.h"
 #include "SpriteGo.h"
 #include "TowerTable.h"
+#include "Object.h"
 
 
 class Enemy;
@@ -21,10 +22,14 @@ protected:
 	Enemy* enemy = nullptr;
 	Tower* tower = nullptr;
 	Arrow* arrow = nullptr;
+	Object* object = nullptr;
 
 	ObjectPool<Enemy> enemyPool;
 	ObjectPool<Tower> towerPool;
 	ObjectPool<Arrow> arrowPool;
+	ObjectPool<Object> objectPool;
+
+	const std::list<Enemy*>* enemys;
 
 	// std::list<Enemy> enemys;
 
@@ -87,19 +92,35 @@ public:
 	void EndStage();
 	void SaveFile();
 
+	// 오브젝트 관련
+
+	void BuildObject(int count, sf::Vector2f pos);
+
 	// 몬스터 관련
 	void SpawnEnemys(int count, sf::Vector2f pos); // 레디우스
 	void OnDieEnemy(Enemy* enemy);
 	void EnemyEndPoint(Enemy* enemy);
+	const std::list<Enemy*>* GetEnemyList() const;
+	const std::list<Tower*>* GetTowerList() const;
 
 	// 타워 관련 , 셋포지션도 추가
-	void TowerAttack(const sf::Vector2f& position, const sf::Vector2f& look, float dt);
+	void TowerAttack();
 
 	void BuildTower(Tower::Types towerType, sf::Vector2f pos);
 
+	void SpawnArrows(/*Arrow::Types arrowType, */int count, sf::Vector2f pos);
 
 	void Test();
+
+	
+
+
+
+
 };
+
+
+
 
 template<typename T>
 inline void SceneDev1::ClearObjectPool(ObjectPool<T>& pool)

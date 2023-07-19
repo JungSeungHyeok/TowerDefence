@@ -13,7 +13,7 @@ struct TowerInfo
     float attackRate;
     int price;
 
-    // float arrowSpeed = 0.f;
+    float arrowSpeed;
     //float attackTimer = 0.f;
 
 };
