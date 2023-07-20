@@ -19,16 +19,23 @@ void Arrow::GetSearchEnemy()
 	Scene* scene = SCENE_MGR.GetCurrScene();
 	SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
 	if (sceneDev1 != nullptr)
+
 	{
 		SetEnemyList(sceneDev1->GetEnemyList()); // 한번만 호출되도록 짜야돼서 위치변경 해야할듯
 	}
 
-
-
 	for (auto enemy : *enemys)
 	{
-		direction = Utils::Normalize(enemy->GetPosition() - this->GetPosition()); // 이게 인자가 하나고 방향을 구하려면 도착점 - 시작점으로 해야함
+		direction = Utils::Normalize(enemy->GetPosition() - this->GetPosition());
 	}
+
+	
+	  // 발사되는시점 // (auto enemy : *enemys)
+
+	 // 이게 인자가 하나고 방향을 구하려면 도착점 - 시작점으로 해야함
+
+
+	
 
 
 }
@@ -56,10 +63,7 @@ void Arrow::Update(float dt)
 {
 
 	SpriteGo::Update(dt);
-
-	//attackTime += dt;
-	
-	GetSearchEnemy(); // 쿨타임 추가해야함
+	GetSearchEnemy(); // 맨 처음 한번만
 
 
 	attackTime += dt;
@@ -84,9 +88,19 @@ void Arrow::Update(float dt)
 	//float attackTime = 0.0f;
 	//float targetTime = 0.1f;
 
+	/*for (auto obj : *enemys)
+	{
+		if (this->sprite.getGlobalBounds().intersects(obj->sprite.getGlobalBounds()))
+		{
+			obj->OnTakeDamege(damage);
+
+			SCENE_MGR.GetCurrScene()->RemoveGo(this);
+			pool->Return(this);
+		}
+	}*/
 	
 
-	
+	//
 
 	//if (enemys != nullptr)
 	//{

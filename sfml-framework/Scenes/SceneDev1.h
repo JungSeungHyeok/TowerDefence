@@ -114,15 +114,7 @@ public:
 
 	void Test();
 
-	
-
-
-
-
 };
-
-
-
 
 template<typename T>
 inline void SceneDev1::ClearObjectPool(ObjectPool<T>& pool)

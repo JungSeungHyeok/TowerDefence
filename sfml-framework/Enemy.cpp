@@ -146,6 +146,11 @@ void Enemy::OnTakeDamege(int damage)
 
 void Enemy::GetSearchTower()
 {
+
+	// 몬스터 수 > 타워 6개
+	// 감지부분은 타워에 넘기고
+	// 공격도 애로우 업데이트가 아니라
+	// 공격도 타워에서 하고
 	
 	Scene* scene = SCENE_MGR.GetCurrScene();
 	SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
@@ -165,6 +170,10 @@ void Enemy::GetSearchTower()
 		{
 			std::cout << "쏨" << std::endl;
 			tower->GetEnemy(this); // 몬스터가 타워에다가 자기 본인을 넘기는것
+			//tower->Getdistanc(this)
+			return; // 한번만
+			// 타워와 나 자신의 위치
+			// 이렇게 할거면 방향을 여기서 넘겨주어야함
 		}
 	}
 

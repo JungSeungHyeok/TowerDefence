@@ -37,7 +37,9 @@ enum class SceneId
 	None = -1,
 	Dev1,
 	Dev2,
+	Title,
 	Count,
+	
 };
 
 #include "AnimationClip.h"

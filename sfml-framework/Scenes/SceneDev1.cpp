@@ -29,7 +29,7 @@ void SceneDev1::Init()
 	sceneName->sortLayer = 100;
 	sceneName->text.setCharacterSize(25);
 	sceneName->text.setFillColor(sf::Color::White);
-	sceneName->text.setString(L"타워디펜스");
+	//sceneName->text.setString(L"이거 나중에 바꿀거임");
 
 	tileMap = (TileMap*)AddGo(new TileMap("graphics/grass.png", "Tile Map"));
 
@@ -41,8 +41,6 @@ void SceneDev1::Init()
 		enemy->SetType(enemyType);
 	};
 	enemyPool.Init();
-
-
 
 	// 애로우 오브젝트풀
 
@@ -62,6 +60,7 @@ void SceneDev1::Init()
 	towerPool.Init();
 
 	// 오브젝트 오브젝트풀
+
 	objectPool.OnCreate = [this](Object* object)
 	{
 		Object::Types objectType = (Object::Types)Utils::RandomRange(0, Object::TotalTypes - 1);
@@ -176,7 +175,7 @@ void SceneDev1::Update(float dt)
 	sf::Vector2f uiMousePos = ScreenToUiPos(mousePos);
 
 	// 마우스 좌표 테스트
-	//std::cout << "마우스x: " << uiMousePos.x << "마우스y: "<< uiMousePos.y << std::endl;
+	// std::cout << "마우스x: " << uiMousePos.x << "마우스y: "<< uiMousePos.y << std::endl;
 	// 마우스 좌표 테스트
 
 
@@ -462,14 +461,14 @@ void SceneDev1::OnDieEnemy(Enemy* enemy)
 	SoundGo* findSound = (SoundGo*)FindGo("EnemyDie"); // 뿅소리
 	//findSound->sound.play();
 
-	gold += 10;
+	// gold += 10;
 
 	TextGo* findGo = (TextGo*)FindGo("Gold");
 
-	std::stringstream message;
+	/*std::stringstream message;
 	message << "Gold:" << gold;
 	findGo->text.setString(message.str());
-	findGo->text.setFillColor(sf::Color::White);
+	findGo->text.setFillColor(sf::Color::White);*/
 
 	// 돈 떨어지는거 만드려면 AddGo(GoldEffect) 이런거 추가하기
 
@@ -615,12 +614,12 @@ void SceneDev1::SpawnArrows(/*Arrow::Types arrowType, */int count, sf::Vector2f 
 	//AddGo(arrow);
 
 
-	for (int i = 0; i < count; ++i)
-	{
-		Arrow* arrow = arrowPool.Get();
-		arrow->SetPosition(352, 200);
-		AddGo(arrow);
-	}
+	//for (int i = 0; i < count; ++i)
+	//{
+	//	Arrow* arrow = arrowPool.Get();
+	//	arrow->SetPosition(352, 200);
+	//	AddGo(arrow);
+	//}
 
 }
 
