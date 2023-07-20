@@ -146,11 +146,14 @@ void Enemy::OnTakeDamege(int damage)
 
 void Enemy::GetSearchTower()
 {
+<<<<<<< HEAD
 
 	// 몬스터 수 > 타워 6개
 	// 감지부분은 타워에 넘기고
 	// 공격도 애로우 업데이트가 아니라
 	// 공격도 타워에서 하고
+=======
+>>>>>>> 23bf381ba8f6646ab9af25ee2139d23805fc0cfc
 	
 	Scene* scene = SCENE_MGR.GetCurrScene();
 	SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);

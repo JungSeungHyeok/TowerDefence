@@ -19,11 +19,15 @@ void Arrow::GetSearchEnemy()
 	Scene* scene = SCENE_MGR.GetCurrScene();
 	SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
 	if (sceneDev1 != nullptr)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 23bf381ba8f6646ab9af25ee2139d23805fc0cfc
 	{
 		SetEnemyList(sceneDev1->GetEnemyList()); // 한번만 호출되도록 짜야돼서 위치변경 해야할듯
 	}
 
+<<<<<<< HEAD
 	for (auto enemy : *enemys)
 	{
 		direction = Utils::Normalize(enemy->GetPosition() - this->GetPosition());
@@ -37,6 +41,15 @@ void Arrow::GetSearchEnemy()
 
 	
 
+=======
+
+
+	for (auto enemy : *enemys)
+	{
+		direction = Utils::Normalize(enemy->GetPosition() - this->GetPosition()); // 이게 인자가 하나고 방향을 구하려면 도착점 - 시작점으로 해야함
+	}
+
+>>>>>>> 23bf381ba8f6646ab9af25ee2139d23805fc0cfc
 
 }
 
@@ -77,6 +90,22 @@ void Arrow::Update(float dt)
 		attackTime = 0.0f;
 	}
 
+	//attackTime += dt;
+	
+	GetSearchEnemy(); // 쿨타임 추가해야함
+
+
+	attackTime += dt;
+	//std::cout << "attackTime: " << attackTime << std::endl;
+
+	position += direction * speed * dt * 10.f;
+	
+	if (attackTime >= targetTime)
+	{
+		sprite.setPosition(position);
+		attackTime = 0.0f;
+	}
+
 	range -= speed * dt;
 
 	if (range < 0.f)
@@ -88,6 +117,7 @@ void Arrow::Update(float dt)
 	//float attackTime = 0.0f;
 	//float targetTime = 0.1f;
 
+<<<<<<< HEAD
 	/*for (auto obj : *enemys)
 	{
 		if (this->sprite.getGlobalBounds().intersects(obj->sprite.getGlobalBounds()))
@@ -102,6 +132,12 @@ void Arrow::Update(float dt)
 
 	//
 
+=======
+	
+
+	
+
+>>>>>>> 23bf381ba8f6646ab9af25ee2139d23805fc0cfc
 	//if (enemys != nullptr)
 	//{
 	//	for (auto obj : *enemys)
