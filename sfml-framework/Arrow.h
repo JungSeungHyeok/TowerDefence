@@ -2,6 +2,7 @@
 #include "SpriteGo.h"
 #include "ObjectPool.h"
 
+
 class Enemy;
 
 class Arrow : public SpriteGo
@@ -17,13 +18,20 @@ public:
 
 protected:
 	Types arrowType;
+	Tower* tower = nullptr;
+	Enemy* enemy = nullptr;
+
+	float attackTime = 0.0f;
+	float targetTime = 1.f;
+
+	//ObjectPool<Enemy> enemyPool;
 
 	sf::Vector2f direction;
 	float speed;
 	float range;
 	int damage;
 
-	const std::list<Enemy*>* enemys;
+	const std::list<Enemy*>* enemys = nullptr;
 
 	// const Tower::Types* towerType; 다시보기
 
@@ -43,6 +51,8 @@ public:
 	void SetType(Types t);
 	Types GetType() const;
 
+
+
 	void SetRange(float range);
 	void SetArrowSpeed(float speed);
 	void SetDamage(int damage);
@@ -51,6 +61,17 @@ public:
 
 	void SetEnemyList(const std::list<Enemy*>* list); // 몬스터 리스트
 
+	//const std::list<Enemy*>* GetEnemyList() const;
+
+	void GetSearchEnemy();
+
+	void GetArrowPool(ObjectPool<Arrow>* pool)
+	{
+		this->pool = pool;
+	}
+
+
+	//const std::list<Tower*>* GetTowerList() const;
 
 	//Enemy* MostCloseEnemy();
 

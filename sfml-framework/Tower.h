@@ -90,9 +90,16 @@ public:
 		this->poolArrows = pool;
 	}
 
-
+	bool CheckEnemy() { return enemy != nullptr; }
 
 	void TowerAttack();
+
+
+
+
+
+
+
 
 
 

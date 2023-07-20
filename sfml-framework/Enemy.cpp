@@ -146,6 +146,7 @@ void Enemy::OnTakeDamege(int damage)
 
 void Enemy::GetSearchTower()
 {
+	
 	Scene* scene = SCENE_MGR.GetCurrScene();
 	SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
 	if (sceneDev1 != nullptr)
@@ -155,9 +156,11 @@ void Enemy::GetSearchTower()
 	for (auto tower : *towers)
 	{
 		float distance = Utils::Distance(this->position, tower->GetPosition());
-		std::cout << distance << std::endl;
-		//if (tower != nullptr)
-		//	return;
+		std::cout << "Distance: " << distance << std::endl;
+
+		/*if (tower->CheckEnemy())
+			return;*/
+
 		if (distance <= tower->GetRange())
 		{
 			std::cout << "½ô" << std::endl;

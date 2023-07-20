@@ -34,7 +34,8 @@ protected:
 	// std::list<Enemy> enemys;
 
 	bool isInstalled = false;
-	bool testHide = true;
+	bool testHide = false;
+
 
 	sf::ConvexShape diamond1;
 	sf::ConvexShape diamond2;
@@ -100,6 +101,7 @@ public:
 	void SpawnEnemys(int count, sf::Vector2f pos); // 레디우스
 	void OnDieEnemy(Enemy* enemy);
 	void EnemyEndPoint(Enemy* enemy);
+
 	const std::list<Enemy*>* GetEnemyList() const;
 	const std::list<Tower*>* GetTowerList() const;
 
