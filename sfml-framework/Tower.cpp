@@ -51,7 +51,8 @@ void Tower::Update(float dt)
 
 	LostEnemy(); // 몬스터 잃어버렸는지? 사거리 밖에 나가서
 
-
+	if (enemy != nullptr)
+		TowerAttack();
 
 
 	//sf::Vector2f look;
@@ -169,6 +170,7 @@ void Tower::LostEnemy()
 		float distance = Utils::Distance(position, enemy->GetPosition());
 		if (distance > range)
 		{
+			arrow->GetSearchEnemy();
 			enemy = nullptr; // 타워의 사거리를 몬스터가 벗어났다는 거니까 널ptr로
 		}
 	}
@@ -188,19 +190,23 @@ void Tower::TowerAttack()
 	auto info = DATATABLE_MGR.Get<ArrowTable>(DataTable::Ids::Arrow)->Get(Arrow::Types::Arrow);
 
 	arrow = poolArrows->Get();
-	arrow->SetType(info.arrowType);           //(Arrow::Types::Arrow); // 일단 화살만
+	arrow->SetType(info.arrowType); //(Arrow::Types::Arrow); // 일단 화살만
 	arrow->SetArrowSpeed(info.speed);
 	arrow->SetRange(info.range);
 	arrow->SetDamage(info.damage);
+	arrow->SetPosition(this->position);
 
+	// direction = Utils::Normalize(this->, tower->GetPosition())
 
-
+	//sf::Vector2f enemyPos = arrow->SetPosition(this->position); 
 
 	Scene* scene = SCENE_MGR.GetCurrScene();
 	SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
 
+
 	if (sceneDev1 != nullptr)
 	{
+
 		sceneDev1->AddGo(arrow); // 데이터만 넘기고 씬데브에서 처리
 	}
 

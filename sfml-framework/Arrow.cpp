@@ -1,18 +1,39 @@
 #include "stdafx.h"
 #include "Arrow.h"
 #include "ArrowTable.h"
+#include "SceneDev1.h"
+#include "Enemy.h"
 
 void Arrow::SetEnemyList(const std::list<Enemy*>* list)
 {
 	enemys = list;
 }
 
-//void Arrow::Aiming(const sf::Vector2f& pos, const sf::Vector2f& dir, float speed)
+//const std::list<Enemy*>* Arrow::GetEnemyList() const
 //{
-//	SetPosition(pos);
-//	direction = dir;
-//	this->speed = speed;
+//	return &enemyPool.GetUseList();
 //}
+
+void Arrow::GetSearchEnemy()
+{
+	Scene* scene = SCENE_MGR.GetCurrScene();
+	SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
+	if (sceneDev1 != nullptr)
+	{
+		SetEnemyList(sceneDev1->GetEnemyList()); // 한번만 호출되도록 짜야돼서 위치변경 해야할듯
+	}
+
+
+
+	for (auto enemy : *enemys)
+	{
+		direction = Utils::Normalize(enemy->GetPosition() - this->GetPosition()); // 이게 인자가 하나고 방향을 구하려면 도착점 - 시작점으로 해야함
+	}
+
+
+}
+
+
 
 void Arrow::Init()
 {
@@ -36,31 +57,50 @@ void Arrow::Update(float dt)
 
 	SpriteGo::Update(dt);
 
+	//attackTime += dt;
+	
+	GetSearchEnemy(); // 쿨타임 추가해야함
+
+
+	attackTime += dt;
+	//std::cout << "attackTime: " << attackTime << std::endl;
+
+	position += direction * speed * dt * 10.f;
+	
+	if (attackTime >= targetTime)
+	{
+		sprite.setPosition(position);
+		attackTime = 0.0f;
+	}
+
 	range -= speed * dt;
+
 	if (range < 0.f)
 	{
 		SCENE_MGR.GetCurrScene()->RemoveGo(this);
 		pool->Return(this);
-		return;
 	}
 
-	position += direction * speed * dt;
-	sprite.setPosition(position);
+	//float attackTime = 0.0f;
+	//float targetTime = 0.1f;
 
-	if (enemys != nullptr)
-	{
-		for (Enemy* enemy : *enemys)
-		{
-			if (sprite.getGlobalBounds().intersects(enemy->sprite.getGlobalBounds()))
-			{
-				enemy->OnTakeDamege(damage);
+	
 
-				SCENE_MGR.GetCurrScene()->RemoveGo(this);
-				pool->Return(this);
-				break;
-			}
-		}
-	}
+	
+
+	//if (enemys != nullptr)
+	//{
+	//	for (auto obj : *enemys)
+	//	{
+	//		if (this->sprite.getGlobalBounds().intersects(obj->sprite.getGlobalBounds()))
+	//		{
+	//			obj->OnTakeDamege(damage);
+
+	//			SCENE_MGR.GetCurrScene()->RemoveGo(this);
+	//			pool->Return(this);
+	//		}
+	//	}
+	//}
 
 }
 

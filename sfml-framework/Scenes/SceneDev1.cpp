@@ -48,6 +48,7 @@ void SceneDev1::Init()
 
 	arrowPool.OnCreate = [this](Arrow* arrow)
 	{
+		arrow->GetArrowPool(&arrowPool);
 		Arrow::Types arrowType = (Arrow::Types)Utils::RandomRange(0, Arrow::TotalTypes - 1);
 		arrow->SetType(arrowType);
 	};
@@ -459,7 +460,7 @@ void SceneDev1::SpawnEnemys(int count, sf::Vector2f pos) // 레디우스
 void SceneDev1::OnDieEnemy(Enemy* enemy)
 {
 	SoundGo* findSound = (SoundGo*)FindGo("EnemyDie"); // 뿅소리
-	findSound->sound.play();
+	//findSound->sound.play();
 
 	gold += 10;
 
@@ -574,6 +575,7 @@ void SceneDev1::TowerAttack()
 
 	//float distance = Utils::Distance(this->tower->sprite.getPosition(), this->enemy->sprite.getPosition());
 
+	// 1. 
 	
 
 	 // csv값 정보 받아서 적용
