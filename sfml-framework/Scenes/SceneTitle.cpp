@@ -75,19 +75,43 @@ void SceneTitle::Init()
 
 
 	sf::Vector2f originalSize = startButton->sprite.getScale();
+	sf::Color gammaColor(100, 100, 100, 255);
 
-	startButton->OnEnter = [startButton, originalSize]()
+	startButton->OnEnter = [startButton, originalSize, gammaColor]()
 	{
+
 		sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/StartButton.png");
+
 		startButton->sprite.setTexture(*tex);
 		startButton->sprite.setScale(originalSize * 1.1f);
-		
+
+		startButton->sprite.setColor(gammaColor); // 감마설정
 	};
+
 	startButton->OnExit = [startButton, originalSize]()
 	{
 		sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/StartButton.png");
 		startButton->sprite.setTexture(*tex);
 		startButton->sprite.setScale(originalSize);
+
+		startButton->sprite.setColor(sf::Color::White);  // 감마설정
+		
+	};
+
+	nextButton->OnEnter = [nextButton, gammaColor]()
+	{
+
+		sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/nextButton.png");
+		nextButton->sprite.setColor(gammaColor); // 감마설정
+	};
+
+	
+
+	nextButton->OnExit = [nextButton, gammaColor]()
+	{
+
+		sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/nextButton.png");
+		nextButton->sprite.setColor(sf::Color::White); // 감마설정
 	};
 
 	startButton->OnClick = [this, startScene, guidebackgrund, guidebook1, nextButton, startButton]()
@@ -102,8 +126,6 @@ void SceneTitle::Init()
 
 	nextButton->OnClick = [this, nextButton, guidebook2, guidebook3]()
 	{
-
-	
 		
 		if (ImageIndex == 0)
 			guidebook2->SetActive(true);
