@@ -25,11 +25,33 @@ void SceneDev1::Init()
 
 	sf::Vector2f size = FRAMEWORK.GetWindowSize();
 
-	TextGo* sceneName = (TextGo*)AddGo(new TextGo("", "Scene Name"));
-	sceneName->sortLayer = 100;
-	sceneName->text.setCharacterSize(25);
-	sceneName->text.setFillColor(sf::Color::White);
-	//sceneName->text.setString(L"이거 나중에 바꿀거임");
+	// 오브젝트 추가
+	SpriteGo* background = (SpriteGo*)AddGo(new SpriteGo("Ui/guidebackgrund.png", "Back Ground"));
+	background->SetOrigin(Origins::MC);
+	background->sortLayer = 1;
+	background->SetPosition(size.x / 2, size.y / 2);
+
+	TextGo* goldText = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Scene Name"));
+	goldText->sortLayer = 100;
+	goldText->text.setCharacterSize(23);
+	goldText->text.setFillColor(sf::Color::Yellow);
+	goldText->text.setString(L"Gold: 320"); // 임시값
+	goldText->SetPosition(75, 15);
+
+	TextGo* waveText = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Scene Name"));
+	waveText->sortLayer = 100;
+	waveText->text.setCharacterSize(23);
+	waveText->text.setFillColor(sf::Color::White);
+	waveText->text.setString(L"Wave 1/5"); // 임시값
+	waveText->SetPosition(75, 65);
+
+	TextGo* gold = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Scene Name"));
+	gold->sortLayer = 100;
+	gold->text.setCharacterSize(23);
+	gold->text.setFillColor(sf::Color::Red);
+	gold->text.setString(L"Life: 15"); // 임시값
+	gold->SetPosition(75, 115);
+
 
 	tileMap = (TileMap*)AddGo(new TileMap("graphics/grass.png", "Tile Map"));
 

@@ -2,13 +2,26 @@
 #include "Scene.h"
 #include "UIButton.h"
 
-//class SpriteGo;
+
 
 class SceneTitle : public Scene
 {
 protected:
 	std::map<std::string, bool> mouseOverStates;
-	//SpriteGo* sprite;
+
+	std::vector<SpriteGo*> guidebooks;
+	int ImageIndex = 0;
+	std::vector<sf::Texture> addImageTextures;
+	sf::Sprite addImage;
+
+	sf::Sprite guidebook1;
+	sf::Sprite guidebook2;
+	sf::Sprite guidebook3;
+	sf::Sprite guidebackgrund;
+	sf::Sprite SelectRound;
+
+	bool isguideButton = false;
+
 public:
 	SceneTitle();
 	virtual ~SceneTitle() override = default;

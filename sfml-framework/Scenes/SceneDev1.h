@@ -8,6 +8,8 @@
 #include "TowerTable.h"
 #include "Object.h"
 
+#include "UIButton.h"
+
 
 class Enemy;
 class Arrow;
@@ -17,6 +19,10 @@ class TileMap;
 class SceneDev1 : public Scene
 {
 protected:
+
+	// std::map<std::string, bool> mouseOverStates; // ui 버튼 추가시 주석 제거
+	sf::Sprite background;
+
 	AnimationController animation;
 	TileMap* tileMap = nullptr;
 	Enemy* enemy = nullptr;

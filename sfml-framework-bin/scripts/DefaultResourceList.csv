@@ -1,5 +1,5 @@
 "RESOURCE_TYPES (0: 텍스처, 1: 폰트, 2: 사운드 클립, 3. 애니메이션 클립)",RESOURCE_PATH
-1,fonts/Noto_Sans_KR/NotoSansKR-Bold.otf
+1,fonts/CookieRunRegular.ttf
 0,graphics/grass.png
 0,Enemy/UFO(1).png
 0,Enemy/UFO(2).png
@@ -46,3 +46,9 @@
 0,Object/grass_deco(9).png
 0,Ui/StartButton.png
 0,Ui/StartScene.png
+0,Ui/SelectRound.png
+0,Ui/guidebackgrund.png
+0,Ui/guidebook1.png
+0,Ui/guidebook2.png
+0,Ui/guidebook3.png
+0,Ui/NextButton.png
