@@ -47,34 +47,11 @@ public:
 	virtual void Draw(sf::RenderWindow& window) override;
 
 	bool Load(const std::string& filePath);
-
 	void SetType(Types t);
 	Types GetType() const;
 
-
-
-	void SetRange(float range);
-	void SetArrowSpeed(float speed);
-	void SetDamage(int damage);
-
-	//void Aiming(const sf::Vector2f& pos, const sf::Vector2f& dir, float speed); // 조준 기존 파이어
-
-	void SetEnemyList(const std::list<Enemy*>* list); // 몬스터 리스트
-
-	//const std::list<Enemy*>* GetEnemyList() const;
-
-	void GetSearchEnemy();
-
-	void GetArrowPool(ObjectPool<Arrow>* pool)
-	{
-		this->pool = pool;
-	}
-
-
-	//const std::list<Tower*>* GetTowerList() const;
-
-	//Enemy* MostCloseEnemy();
-
+	void Aiming(float range, float speed, int damage, sf::Vector2f direction);
+	void SetEnemyList(const std::list<Enemy*>* list);
 
 };
 

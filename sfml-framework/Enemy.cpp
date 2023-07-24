@@ -59,8 +59,6 @@ void Enemy::Update(float dt)
 {
 	SpriteGo::Update(dt);
 
-	GetSearchTower();
-
 	//std::cout << position.x << ", " << position.y << std::endl;
 	float distance = Utils::Distance(currPoint, position);
 
@@ -94,6 +92,7 @@ void Enemy::Update(float dt)
 
 			if (sceneDev1 != nullptr)
 			{
+				
 				sceneDev1->EnemyEndPoint(this); // 데이터만 넘기고 씬데브에서 처리
 			}
 
@@ -121,12 +120,6 @@ Enemy::Types Enemy::GetType() const
 	return enemyType;
 }
 
-
-void Enemy::SetPlayer(Tower* tower)
-{
-	this->tower = tower; // 타워의 위치값을 받기위해
-}
-
 void Enemy::OnTakeDamege(int damage)
 {
 	hp -= damage; // hitedSound->sound.play(); 사운드는 나중에
@@ -144,65 +137,14 @@ void Enemy::OnTakeDamege(int damage)
 		}
 	}
 }
-
-void Enemy::GetSearchTower()
+bool Enemy::HasrealEndPoint() const
 {
-
-	// 몬스터 수 > 타워 6개
-	// 감지부분은 타워에 넘기고
-	// 공격도 애로우 업데이트가 아니라
-	// 공격도 타워에서 하고
-	
-	Scene* scene = SCENE_MGR.GetCurrScene();
-	SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
-	if (sceneDev1 != nullptr)
-	{
-		SetTowerList(sceneDev1->GetTowerList());
-	}
-	for (auto tower : *towers)
-	{
-		float distance = Utils::Distance(this->position, tower->GetPosition());
-		std::cout << "Distance: " << distance << std::endl;
-
-		/*if (tower->CheckEnemy())
-			return;*/
-
-		if (distance <= tower->GetRange())
-		{
-			std::cout << "쏨" << std::endl;
-			tower->GetEnemy(this); // 몬스터가 타워에다가 자기 본인을 넘기는것
-			//tower->Getdistanc(this)
-			return; // 한번만
-			// 타워와 나 자신의 위치
-			// 이렇게 할거면 방향을 여기서 넘겨주어야함
-		}
-	}
-
+	return realEndPoint;
 }
-
-
-
-
-// 보류
-bool Enemy::GetFlipX() const
+void Enemy::SetrealEndPoint(bool arrived)
 {
-	return flipX;
+	realEndPoint = arrived;
 }
-
-void Enemy::SetFlipX(bool flip)
-{
-	flipX = flip;
-
-	sf::Vector2f scale = sprite.getScale();
-	scale.x = !flipX ? abs(scale.x) : -abs(scale.x);
-	sprite.setScale(scale); // 실습과제참고
-}
-
-void Enemy::SetTowerList(const std::list<Tower*>* list)
-{
-	towers = list;
-}
-
 void Enemy::Draw(sf::RenderWindow& window)
 {
 	SpriteGo::Draw(window);

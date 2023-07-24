@@ -7,7 +7,7 @@
 #include "SpriteGo.h"
 #include "TowerTable.h"
 #include "Object.h"
-
+#include "TextGo.h"
 #include "UIButton.h"
 
 
@@ -22,6 +22,14 @@ protected:
 
 	// std::map<std::string, bool> mouseOverStates; // ui 버튼 추가시 주석 제거
 	sf::Sprite background;
+
+	SpriteGo* roundStart;
+	//sf::Sprite roundStart;
+	float targetDuration = 2.0f;
+	float trigger = 0.0f;
+	sf::Vector2f currentPosition = { 640, 400 };
+	sf::Vector2f targetPosition = { 1241, 33 };
+	
 
 	AnimationController animation;
 	TileMap* tileMap = nullptr;
@@ -70,6 +78,9 @@ protected:
 	int round = 0;
 	int stage = 0;
 	int gold = 0;
+
+	TextGo* lifeText;
+	int life = 0;
 	
 	int frame = 0; // 프레임 체크 시간나면
 	float totalDt = 0;
@@ -113,10 +124,7 @@ public:
 
 	// 타워 관련 , 셋포지션도 추가
 	void TowerAttack();
-
 	void BuildTower(Tower::Types towerType, sf::Vector2f pos);
-
-	void SpawnArrows(/*Arrow::Types arrowType, */int count, sf::Vector2f pos);
 
 	void Test();
 

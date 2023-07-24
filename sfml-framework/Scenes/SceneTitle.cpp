@@ -14,6 +14,9 @@ void SceneTitle::Init()
 	Release();
 	sf::Vector2f size = FRAMEWORK.GetWindowSize();
 
+	
+	
+
 	SpriteGo* startScene = (SpriteGo*)AddGo(new SpriteGo("Ui/StartScene.png", "Start Scene"));
 	startScene->SetOrigin(Origins::MC);
 	startScene->sortLayer = 100;
@@ -62,12 +65,28 @@ void SceneTitle::Init()
 	startButton->sortLayer = 100;
 	startButton->SetPosition(size.x /2, size.y * 0.85);
 
+
+	TextGo* startFont = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Start Font"));
+	startFont->sortLayer = 101;
+	startFont->text.setCharacterSize(40);
+	startFont->text.setFillColor(sf::Color::White);
+	startFont->text.setString(L"Start"); // 임시값
+	startFont->SetPosition(size.x / 2 * 0.917f, 584.f);
+
+
 	UIButton* nextButton = (UIButton*)AddGo(new UIButton("Ui/NextButton.png"));
 	nextButton->SetOrigin(Origins::MC);
 	nextButton->sortLayer = 101;
 	nextButton->SetPosition(size.x * 0.612f, size.y * 0.79f);
 
 	nextButton->SetActive(false);
+
+	UIButton* skipButton = (UIButton*)AddGo(new UIButton("Ui/SkipButton.png"));
+	skipButton->SetOrigin(Origins::MC);
+	skipButton->sortLayer = 102;
+	skipButton->SetPosition(size.x * 0.387f, size.y * 0.79f);
+
+	skipButton->SetActive(false);
 	
 	//guidebooks.push_back(guidebook1); //배열에 집어넣고
 	guidebooks.push_back(guidebook2);
@@ -79,12 +98,11 @@ void SceneTitle::Init()
 
 	startButton->OnEnter = [startButton, originalSize, gammaColor]()
 	{
-
-		sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/StartButton.png");
-
-		startButton->sprite.setTexture(*tex);
-		startButton->sprite.setScale(originalSize * 1.1f);
-
+		// 크기설정 제거 임시
+		//sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/StartButton.png");
+		//startButton->sprite.setTexture(*tex); 
+		//startButton->sprite.setScale(originalSize * 1.1f);
+		
 		startButton->sprite.setColor(gammaColor); // 감마설정
 	};
 
@@ -98,33 +116,48 @@ void SceneTitle::Init()
 		
 	};
 
+	skipButton->OnEnter = [skipButton, gammaColor]()
+	{
+
+		sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/SkipButton.png");
+		skipButton->sprite.setColor(gammaColor); // 감마설정
+	};
+
 	nextButton->OnEnter = [nextButton, gammaColor]()
 	{
 
-		sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/nextButton.png");
+		sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/NextButton.png");
 		nextButton->sprite.setColor(gammaColor); // 감마설정
 	};
-
 	
 
 	nextButton->OnExit = [nextButton, gammaColor]()
 	{
 
-		sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/nextButton.png");
+		sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/NextButton.png");
 		nextButton->sprite.setColor(sf::Color::White); // 감마설정
 	};
 
-	startButton->OnClick = [this, startScene, guidebackgrund, guidebook1, nextButton, startButton]()
+	skipButton->OnExit = [skipButton, gammaColor]()
 	{
-		startButton->SetActive(false); // 1
-		startScene->SetActive(false); // 2 끄고
 
-		guidebackgrund->SetActive(true); // 3 키고
-		guidebook1->SetActive(true); // 4
-		nextButton->SetActive(true); // 5
+		sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/SkipButton.png");
+		skipButton->sprite.setColor(sf::Color::White); // 감마설정
 	};
 
-	nextButton->OnClick = [this, nextButton, guidebook2, guidebook3]()
+	startButton->OnClick = [this, startScene, startFont, guidebackgrund, guidebook1, nextButton, startButton, skipButton]()
+	{
+		startButton->SetActive(false); // 1
+		startScene->SetActive(false); // 2
+		startFont->SetActive(false); // 3 끄고
+
+		guidebackgrund->SetActive(true); // 1 키고
+		guidebook1->SetActive(true); // 2
+		nextButton->SetActive(true); // 3
+		skipButton->SetActive(true); // 4
+	};
+
+	nextButton->OnClick = [this, nextButton, guidebook2, guidebook3, skipButton]()
 	{
 		
 		if (ImageIndex == 0)
@@ -134,68 +167,21 @@ void SceneTitle::Init()
 			sf::Vector2f size = FRAMEWORK.GetWindowSize();
 			nextButton->SetPosition(size.x * 0.5f, size.y * 0.79f);
 			guidebook3->SetActive(true);
+			skipButton->SetActive(false);
 		}
 			
 		else if (ImageIndex > guidebooks.size() - 1)  // 조건문 추가 인덱스는 0,1,2 / 사이즈는 3이 맞다
 		{
 			SCENE_MGR.ChangeScene(SceneId::Dev1);
-
 		}
 
 		ImageIndex = (ImageIndex + 1);
+	}; 
 
-
-
-
-
-		//if (ImageIndex > guidebooks.size())  // 조건문 추가 인덱스는 0,1,2 / 사이즈는 3이 맞다
-		//{
-		//	SCENE_MGR.ChangeScene(SceneId::Dev1);
-
-		//}
-
-
-
-
-
-
-
-
-		//guidebooks[ImageIndex]->SetActive(true); // 다음 이미지
-		//ImageIndex = (ImageIndex + 1) % (guidebooks.size());
-
-
-		//if (ImageIndex > guidebooks.size())  // 조건문 추가 인덱스는 0,1,2 / 사이즈는 3이 맞다
-		//{
-		//	SCENE_MGR.ChangeScene(SceneId::Dev1);
-
-		//}
-
-
-
-
-
-
-
-
-
-
-
-		//else
-		//{
-		//	guidebooks[ImageIndex]->SetActive(true); // 다음 이미지
-		//	ImageIndex = (ImageIndex + 1) % (guidebooks.size() + 1);
-		//}
-
-		/*guidebackgrund->SetActive(true);
-		//guidebook1->SetActive(true);*/
-
-		//isguideButton = !isguideButton; // 토글
-
-		//SCENE_MGR.ChangeScene(SceneId::Dev1);
-	}; // 넥스트버튼 추가는 했는데 오브젝트 하고 추가
-
-	
+	skipButton->OnClick = [skipButton]()
+	{
+		SCENE_MGR.ChangeScene(SceneId::Dev1);
+	};
 
 	
 

@@ -3,7 +3,6 @@
 #include "UIButton.h"
 
 
-
 class SceneTitle : public Scene
 {
 protected:
@@ -21,6 +20,8 @@ protected:
 	sf::Sprite SelectRound;
 
 	bool isguideButton = false;
+
+	// 애니메이션을 시작할 때의 버튼 위치와 목표 위치를 정의합니다.
 
 public:
 	SceneTitle();

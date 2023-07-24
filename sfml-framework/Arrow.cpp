@@ -4,44 +4,6 @@
 #include "SceneDev1.h"
 #include "Enemy.h"
 
-void Arrow::SetEnemyList(const std::list<Enemy*>* list)
-{
-	enemys = list;
-}
-
-//const std::list<Enemy*>* Arrow::GetEnemyList() const
-//{
-//	return &enemyPool.GetUseList();
-//}
-
-void Arrow::GetSearchEnemy()
-{
-	Scene* scene = SCENE_MGR.GetCurrScene();
-	SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
-	if (sceneDev1 != nullptr)
-
-	{
-		SetEnemyList(sceneDev1->GetEnemyList()); // 한번만 호출되도록 짜야돼서 위치변경 해야할듯
-	}
-
-	for (auto enemy : *enemys)
-	{
-		direction = Utils::Normalize(enemy->GetPosition() - this->GetPosition());
-	}
-
-	
-	  // 발사되는시점 // (auto enemy : *enemys)
-
-	 // 이게 인자가 하나고 방향을 구하려면 도착점 - 시작점으로 해야함
-
-
-	
-
-
-}
-
-
-
 void Arrow::Init()
 {
 	SpriteGo::Init();
@@ -61,60 +23,32 @@ void Arrow::Reset()
 
 void Arrow::Update(float dt)
 {
-
 	SpriteGo::Update(dt);
-	GetSearchEnemy(); // 맨 처음 한번만
-
-
-	attackTime += dt;
-	//std::cout << "attackTime: " << attackTime << std::endl;
-
-	position += direction * speed * dt * 10.f;
-	
-	if (attackTime >= targetTime)
-	{
-		sprite.setPosition(position);
-		attackTime = 0.0f;
-	}
 
 	range -= speed * dt;
-
 	if (range < 0.f)
 	{
 		SCENE_MGR.GetCurrScene()->RemoveGo(this);
 		pool->Return(this);
 	}
 
-	//float attackTime = 0.0f;
-	//float targetTime = 0.1f;
+	position += direction * speed * dt * 10.f;
+	sprite.setPosition(position);
+	//SetPosition(position);
 
-	/*for (auto obj : *enemys)
+	if (enemys != nullptr)
 	{
-		if (this->sprite.getGlobalBounds().intersects(obj->sprite.getGlobalBounds()))
+		for (auto enemy : *enemys)
 		{
-			obj->OnTakeDamege(damage);
+			if (this->sprite.getGlobalBounds().intersects(enemy->sprite.getGlobalBounds()))
+			{
+				enemy->OnTakeDamege(damage);
 
-			SCENE_MGR.GetCurrScene()->RemoveGo(this);
-			pool->Return(this);
+				SCENE_MGR.GetCurrScene()->RemoveGo(this);
+				pool->Return(this);
+			}
 		}
-	}*/
-	
-
-	//
-
-	//if (enemys != nullptr)
-	//{
-	//	for (auto obj : *enemys)
-	//	{
-	//		if (this->sprite.getGlobalBounds().intersects(obj->sprite.getGlobalBounds()))
-	//		{
-	//			obj->OnTakeDamege(damage);
-
-	//			SCENE_MGR.GetCurrScene()->RemoveGo(this);
-	//			pool->Return(this);
-	//		}
-	//	}
-	//}
+	}
 
 }
 
@@ -143,20 +77,19 @@ Arrow::Types Arrow::GetType() const
 	return arrowType;
 }
 
-void Arrow::SetRange(float range)
+void Arrow::Aiming(float range, float speed, int damage, sf::Vector2f direction)
 {
 	this->range = range;
-}
-
-void Arrow::SetArrowSpeed(float speed)
-{
 	this->speed = speed;
+	this->damage = damage;
+	this->direction = direction;
 }
 
-void Arrow::SetDamage(int damage)
+void Arrow::SetEnemyList(const std::list<Enemy*>* list)
 {
-	this->damage = damage;
+	enemys = list;
 }
+
 
 
 

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SceneDev1.h"
-#include "TextGo.h"
+
 #include "TileMap.h"
 
 #include "InputMgr.h"
@@ -25,11 +25,20 @@ void SceneDev1::Init()
 
 	sf::Vector2f size = FRAMEWORK.GetWindowSize();
 
-	// 오브젝트 추가
+	// 백그라운드
 	SpriteGo* background = (SpriteGo*)AddGo(new SpriteGo("Ui/guidebackgrund.png", "Back Ground"));
 	background->SetOrigin(Origins::MC);
 	background->sortLayer = 1;
 	background->SetPosition(size.x / 2, size.y / 2);
+
+	// 버튼 움직이게
+	roundStart = (SpriteGo*)AddGo(new SpriteGo("Ui/roundStart.png", "Round Start"));
+	roundStart->SetOrigin(Origins::MC);
+	roundStart->sortLayer = 2;
+	roundStart->SetPosition(size.x / 2, size.y / 2);
+		
+
+	// 텍스트
 
 	TextGo* goldText = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Scene Name"));
 	goldText->sortLayer = 100;
@@ -45,12 +54,14 @@ void SceneDev1::Init()
 	waveText->text.setString(L"Wave 1/5"); // 임시값
 	waveText->SetPosition(75, 65);
 
-	TextGo* gold = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Scene Name"));
-	gold->sortLayer = 100;
-	gold->text.setCharacterSize(23);
-	gold->text.setFillColor(sf::Color::Red);
-	gold->text.setString(L"Life: 15"); // 임시값
-	gold->SetPosition(75, 115);
+	lifeText = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Scene Name"));
+	lifeText->sortLayer = 100;
+	lifeText->text.setCharacterSize(23);
+	lifeText->text.setFillColor(sf::Color::Red);
+	lifeText->text.setString(L"Life: 15"); // 임시값
+	lifeText->SetPosition(75, 115);
+
+
 
 
 	tileMap = (TileMap*)AddGo(new TileMap("graphics/grass.png", "Tile Map"));
@@ -68,7 +79,7 @@ void SceneDev1::Init()
 
 	arrowPool.OnCreate = [this](Arrow* arrow)
 	{
-		arrow->GetArrowPool(&arrowPool);
+		//arrow->GetArrowPool(&arrowPool);
 		Arrow::Types arrowType = (Arrow::Types)Utils::RandomRange(0, Arrow::TotalTypes - 1);
 		arrow->SetType(arrowType);
 	};
@@ -185,8 +196,19 @@ void SceneDev1::Exit()
 
 void SceneDev1::Update(float dt)
 {
-
 	Scene::Update(dt);
+	{
+		// 버튼 위치 업데이트
+		trigger += dt / targetDuration;
+
+		if (trigger > 1.0f)
+			trigger = 1.0f;
+
+		sf::Vector2f newPosition = currentPosition + (targetPosition - currentPosition) * trigger;
+		roundStart->SetPosition(newPosition);
+		//std::cout << "newPosition: " << newPosition.x << ", " << newPosition.y << std::endl;
+	}
+	
 
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::Escape))
 	{
@@ -370,8 +392,6 @@ void SceneDev1::Update(float dt)
 		}
 	}
 
-
-	
 }
 
 
@@ -430,41 +450,6 @@ void SceneDev1::BuildObject(int count, sf::Vector2f pos)
 		// 변경
 		AddGo(object);
 	}
-	
-
-
-	//
-	//for (int i = 0; i < 5; i++)
-	//{
-	//	Object* object = objectPool.Get();
-	//	object->SetPosition(objPos.x * (i), objPos.y);
-	//	objPos.x += 51;
-	//}
-	//
-	//AddGo(object);
-
-
-
-
-
-	//sf::Vector2f startPos = { 45, 56 };
-	//float heightDifference = objPos.y * 0.3025f;
-
-	//for (int i = 0; i < 3; ++i)
-	//{
-	//	Object* object = objectPool.Get();
-	//	object->SetPosition(objPos.x, objPos.y * i);
-
-	//	if (i % 10 == 0)
-	//	{
-	//		//break;
-	//	}
-
-	//	//objPos.x += 80;
-	//	//objPos.y += 50;
-	//	AddGo(object);
-	//}
-
 
 }
 
@@ -473,63 +458,44 @@ void SceneDev1::SpawnEnemys(int count, sf::Vector2f pos) // 레디우스
 	for (int i = 0; i < count; ++i)
 	{
 		Enemy* enemy = enemyPool.Get();
-		enemy->SetPosition(352, -10);
+		enemy->SetPosition(358, -17);
 		AddGo(enemy);
 	}
 }
 
 void SceneDev1::OnDieEnemy(Enemy* enemy)
 {
-	SoundGo* findSound = (SoundGo*)FindGo("EnemyDie"); // 뿅소리
-	//findSound->sound.play();
-
-	// gold += 10;
-
-	TextGo* findGo = (TextGo*)FindGo("Gold");
-
-	/*std::stringstream message;
-	message << "Gold:" << gold;
-	findGo->text.setString(message.str());
-	findGo->text.setFillColor(sf::Color::White);*/
-
-	// 돈 떨어지는거 만드려면 AddGo(GoldEffect) 이런거 추가하기
-
 	RemoveGo(enemy);
 	enemyPool.Return(enemy);
-
-	// 화살이랑 불렛 이펙트 2개
-	// 신게임참고
-
-	//SpriteEffect* bloodE = bloodEffectPool.Get(); 
-	//bloodE->SetPosition(zombie->GetPosition());
-	//AddGo(bloodE);
-	//float bloodsize = 0.5 + (1.0 - ((int)zombie->GetType() * 0.5));
-	//float rot = Utils::RandomRange(0, 270);
-	//bloodE->SetSize(bloodsize, bloodsize);
-	//bloodE->sprite.setRotation(rot);
-	//bloodE->sprite.setRotation(rot);
-
-	//SpriteEffect* bloodE = bloodEffectPool.Get();
-	//bloodE->SetPosition(zombie->GetPosition());
-	//AddGo(bloodE);
-	//float bloodsize = 0.5 + (1.0 - ((int)zombie->GetType() * 0.5));
-	//float rot = Utils::RandomRange(0, 270);
-	//bloodE->SetSize(bloodsize, bloodsize);
-	//bloodE->sprite.setRotation(rot);
-	//bloodE->sprite.setRotation(rot);
-
-
-	// 여기서 몬스터 돈 처리 (라운드 or 스테이지 및 몬스터 하나당)
-	// 웨이브, 라운드, 돈 등 텍스트고 생각중
-
-	// 월드 포지션을 타일인덱스로 변환하면
-	// 나중에 마우스클릭 충돌처리도 할필요없다
 }
 
 void SceneDev1::EnemyEndPoint(Enemy* enemy)
 {
+	// 라이프 감소 1씩 적용
+	if (enemy->HasrealEndPoint())
+	{
+		return;
+	}
+	enemy->SetrealEndPoint(true);
+
 	RemoveGo(enemy);
 	enemyPool.Return(enemy);
+
+	sf::Vector2f point5 = { 1270.f, 504.f };
+
+	if ((Utils::Distance(enemy->GetPosition(), point5) < 0.5f))
+	{
+		life--;
+	}
+	
+
+	if (life < 0)
+	{
+		life = 0;
+	}
+
+	std::string lifeString = "Life: " + std::to_string(life);
+	lifeText->text.setString(sf::String::fromUtf8(lifeString.begin(), lifeString.end()));
 }
 
 const std::list<Enemy*>* SceneDev1::GetEnemyList() const
@@ -542,78 +508,11 @@ const std::list<Tower*>* SceneDev1::GetTowerList() const
 	return &towerPool.GetUseList();
 }
 
-
-
-
-
-
-//void SceneDev1::SetPosition(float x, float y)
-//{
-//	SpriteGo::SetPosition(x, y);
-//}
-//
-//void SceneDev1::SetPosition(const sf::Vector2f& p)
-//{
-//	SpriteGo::SetPosition(p);
-//}
-
-
-
-
-
-
 void SceneDev1::TowerAttack()
 {
 
 
-
-
-
-	// 오브젝트풀은 몬스터, 타워, 화살 모두 썼다.
-	// 체력, 데미지, 스피드 등은 모두 csv 엑셀 파일에 명시되어있다.
-	// 타워 -> 애니미리스트 들고있음
-	// 
-	// 애로우 -> 애니미리스트 이것도 되긴하는데 방식이다름
-	// 
-	// 애니미 -> 애로우리스트(불렛)
-
-	// 1. 애로우는 타워의 겟포지션에서 출발한다.
-	// 2. 애로우의 목적지는 몬스터의 겟 포지션이다.
-	// 3. 애로우는 몬스터의 포지션과 겹치면 사라진다.
-
-	//Arrow* arrow = arrowPool.Get();
-	
-	
-	//if (INPUT_MGR.GetKeyDown(sf::Keyboard::A))
-	//{
-	//	std::cout << "Test A키" << std::endl;
-	//	//arrow->SetPosition(500, 300);
-	//	//arrow->Reset();
-	//	arrow->Aiming(position, look, 1000.f);
-	//	AddGo(arrow);
-	//}
-
-
-	//float distance = Utils::Distance(this->tower->sprite.getPosition(), this->enemy->sprite.getPosition());
-
-	// 1. 
-	
-
-	 // csv값 정보 받아서 적용
-
-
-	//arrow->SetType(arrowType);
-	//arrow->SetPosition(pos);
-	//arrow->Reset();
-
-
-	
-	//	arrow->Aiming(); // 인자 3개0
-
-
 }
-
-
 
 void SceneDev1::BuildTower(Tower::Types towerType, sf::Vector2f pos)
 {
@@ -626,39 +525,13 @@ void SceneDev1::BuildTower(Tower::Types towerType, sf::Vector2f pos)
 	std::cout << tower->GetPosition().x << " , " << tower->GetPosition().y << std::endl;
 }
 
-void SceneDev1::SpawnArrows(/*Arrow::Types arrowType, */int count, sf::Vector2f pos)
-{
-
-	//Arrow* arrow = arrowPool.Get();
-	//arrow->SetType(arrowType);
-	//arrow->SetPosition(pos);
-	//arrow->Reset();
-	//AddGo(arrow);
-
-
-	//for (int i = 0; i < count; ++i)
-	//{
-	//	Arrow* arrow = arrowPool.Get();
-	//	arrow->SetPosition(352, 200);
-	//	AddGo(arrow);
-	//}
-
-}
-
 void SceneDev1::Test()
 {
-
-
-	//sf::Vector2f popo;
-	//sf::Vector2f loooook;
-	//TowerAttack(popo, loooook, 10.f);
-
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::E))
 	{
-		SpawnEnemys(1, {0,0});
+		SpawnEnemys(3, { 0,0 });
 		std::cout << "몬스터 생성!" << std::endl;
 	}
-
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::C))
 	{
 		ClearObjectPool(enemyPool);
@@ -668,42 +541,11 @@ void SceneDev1::Test()
 
 		std::cout << "삭제 완료!" << std::endl;
 	}
-
 	if (INPUT_MGR.GetKeyDown(sf::Keyboard::O))
 	{
-		//sf::Vector2f objDir = { 300, 400 };
-
 		BuildObject(25, { 0,0 });
-
-		//for (int i = 0; i < 20; i++)
-		//{
-		//	BuildObject(1, { 0,0 });
-		//	//objDir.y += 80;
-		//}
-
 		std::cout << "오브젝트 생성!" << std::endl;
 	}
-
-	//if (INPUT_MGR.GetKeyDown(sf::Keyboard::A))
-	//{
-	//	SpawnArrows(1, { 0,0 });
-	//	std::cout << "화살 생성!" << std::endl;
-	//}
-
-
-	/*if (INPUT_MGR.GetKeyDown(sf::Keyboard::A))
-	{
-		Arrow* arrow = arrowPool.Get();
-		arrow->Aiming({ 0,0 }, {0, 0}, 1000.f);
-
-		Scene* scene = SCENE_MGR.GetCurrScene();
-		SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
-		if (sceneDev1 != nullptr)
-		{
-			arrow->SetEnemyList(sceneDev1->GetEnemyList());
-			sceneDev1->AddGo(arrow);
-		}
-	}*/
 
 
 }
