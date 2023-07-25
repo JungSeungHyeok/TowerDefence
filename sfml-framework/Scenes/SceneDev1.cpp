@@ -19,6 +19,8 @@
 SceneDev1::SceneDev1() : Scene(SceneId::Dev1), tower(nullptr)
 {
 	resourceListPath = "scripts/SceneDev1ResourceList.csv";
+
+	resources.push_back(std::make_tuple(ResourceTypes::Texture, "graphics/GoldCoinSheet.png"));
 }
 
 void SceneDev1::Init()
@@ -32,6 +34,13 @@ void SceneDev1::Init()
 	background->SetOrigin(Origins::MC);
 	background->sortLayer = 1;
 	background->SetPosition(size.x / 2, size.y / 2);
+
+	upgradeArcher2 = (SpriteGo*)AddGo(new SpriteGo("Ui/UpgradeArcher2.png", "UpgradeArcher2"));
+	upgradeArcher2->SetOrigin(Origins::MC);
+	upgradeArcher2->sortLayer = 300;
+	upgradeArcher2->SetPosition(size.x / 2, size.y / 2);
+
+	upgradeArcher2->SetActive(false);
 
 	// 스타트 버튼 움직이게
 	roundStart = (SpriteGo*)AddGo(new SpriteGo("Ui/roundStart.png", "Round Start"));
@@ -80,6 +89,20 @@ void SceneDev1::Init()
 
 	RestartButton->SetActive(false);
 
+	UIButton* upgradeButton = (UIButton*)AddGo(new UIButton("Ui/upgradeButton.png", "Upgrade Button"));
+	upgradeButton->SetOrigin(Origins::MC);
+	upgradeButton->sortLayer = 301;
+	upgradeButton->SetPosition({ 760, 550 });
+
+	upgradeButton->SetActive(false);
+
+	UIButton* giveupButton = (UIButton*)AddGo(new UIButton("Ui/giveupButton.png", "giveupButton"));
+	giveupButton->SetOrigin(Origins::MC);
+	giveupButton->sortLayer = 301;
+	giveupButton->SetPosition({ 975, 660 });
+
+	giveupButton->SetActive(false);
+
 	// 홈 버튼
 	UIButton* HomeButton = (UIButton*)AddGo(new UIButton("Ui/HomeButton.png", "Volume Off Button"));
 	HomeButton->SetOrigin(Origins::MC);
@@ -109,11 +132,7 @@ void SceneDev1::Init()
 			sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/pauseButton.png");
 			pauseButton->sprite.setColor(gammaColor);
 		};
-		pauseButton->OnEnter = [pauseButton, gammaColor]()
-		{
-			sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/pauseButton.png");
-			pauseButton->sprite.setColor(gammaColor);
-		};
+		
 		volumeOnButton->OnEnter = [volumeOnButton, gammaColor]()
 		{
 			sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/volumeOnButton.png");
@@ -138,6 +157,16 @@ void SceneDev1::Init()
 		{
 			sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/HomeButton.png");
 			HomeButton->sprite.setColor(gammaColor);
+		};
+		upgradeButton->OnEnter = [upgradeButton, gammaColor]()
+		{
+			sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/upgradeButton.png");
+			upgradeButton->sprite.setColor(gammaColor);
+		};
+		giveupButton->OnEnter = [giveupButton, gammaColor]()
+		{
+			sf::Texture* tex = RESOURCE_MGR.GetTexture("Ui/giveupButton.png");
+			giveupButton->sprite.setColor(gammaColor);
 		};
 
 		startButton->OnExit = [startButton, gammaColor]()
@@ -222,13 +251,17 @@ void SceneDev1::Init()
 			HomeButton->SetActive(false);
 			
 		};
-		HomeButton->OnClick = [this, pauseButton, continueButton, RestartButton, HomeButton]()
+		HomeButton->OnClick = [this, pauseButton, continueButton, RestartButton, HomeButton, background, startButton]()
 		{
 			SCENE_MGR.SetdtSpeed(1);
 			pauseBoard->SetActive(false);
 			continueButton->SetActive(false);
 			RestartButton->SetActive(false);
 			HomeButton->SetActive(false);
+			background->SetActive(false);
+			startButton->SetActive(true);
+			ResetGame();
+			//Scene::Exit();
 			SCENE_MGR.ChangeScene(SceneId::Title);
 		};
 
@@ -236,29 +269,35 @@ void SceneDev1::Init()
 
 	// 텍스트
 
-	goldText = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Scene Name"));
+	goldText = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Gold Text"));
 	goldText->sortLayer = 100;
 	goldText->text.setCharacterSize(23);
 	goldText->text.setFillColor(sf::Color::Yellow);
 	goldText->text.setString(L"Gold: 320"); // 임시값
 	goldText->SetPosition(75, 15);
 
-	waveText = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Scene Name"));
+	waveText = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Wave Text"));
 	waveText->sortLayer = 100;
 	waveText->text.setCharacterSize(23);
 	waveText->text.setFillColor(sf::Color::White);
 	waveText->text.setString(L"Wave 1/10"); // 임시값
 	waveText->SetPosition(75, 65);
 
-	lifeText = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Scene Name"));
+	lifeText = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Life Text"));
 	lifeText->sortLayer = 100;
 	lifeText->text.setCharacterSize(23);
 	lifeText->text.setFillColor(sf::Color::Red);
 	lifeText->text.setString(L"Life: 15"); // 임시값
 	lifeText->SetPosition(75, 115);
 
+	upgradeText = (TextGo*)AddGo(new TextGo("fonts/CookieRunRegular.ttf", "Upgrade Text"));
+	upgradeText->sortLayer = 301;
+	upgradeText->text.setCharacterSize(32);
+	upgradeText->text.setFillColor(sf::Color::White);
+	upgradeText->text.setString(L"ArcherTower2\n\nFast Attack Speed↑\n\nDamage Up↑"); // 임시값
+	upgradeText->SetPosition(670, 200);
 
-
+	upgradeText->SetActive(false);
 
 	tileMap = (TileMap*)AddGo(new TileMap("graphics/grass.png", "Tile Map"));
 
@@ -310,11 +349,30 @@ void SceneDev1::Init()
 
 	goldEffectPool.OnCreate = [this](SpriteEffect* effect)
 	{
+		effect->textureId = "Ui/GoldCoinSheet.png";
 		effect->SetDuration(1.0f);
 		effect->SetPool(&goldEffectPool);
+		effect->sortLayer = 200;
+		
 	};
 	goldEffectPool.Init();
 
+	/*SpriteEffect* effect = nullptr;
+	
+	AnimationClip clip;
+	clip.id = "Idle";
+	clip.fps = 10;
+	clip.loopType = AnimationLoopTypes::Loop;
+
+	sf::IntRect coord(0, 0, 8, 4);
+	for (int i = 0; i < 24; ++i)
+	{
+		clip.frames.push_back({ effect->textureId, coord });
+		coord.left += coord.width;
+	}
+	animation.AddClip(clip);*/
+		
+	
 
 	for (auto go : gameObjects)
 	{
@@ -389,6 +447,7 @@ void SceneDev1::Init()
 
 void SceneDev1::Release()
 {
+	goldEffectPool.Release();
 	for (auto go : gameObjects)
 	{
 		//go->Release();
@@ -408,6 +467,7 @@ void SceneDev1::Exit()
 
 void SceneDev1::Update(float dt)
 {
+	animation.Update(dt);
 	Scene::Update(dt);
 	{
 		// 버튼 위치 업데이트
@@ -614,7 +674,7 @@ void SceneDev1::Update(float dt)
 	bool prevHover = isHover;
 
 
-	if (!prevHover && INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
+	/*if (!prevHover && INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
 	{
 		sf::Vector2f tileSize = { 90, 85 };
 
@@ -625,7 +685,7 @@ void SceneDev1::Update(float dt)
 		sf::Vector2f isoTileCoords = tile.screenToIsoTileCoords(uiMousePos, sf::Vector2f(tileSize.x, tileSize.y));
 
 		std::cout << "Clicked Isometric Tile: (" << isoTileCoords.x << ", " << isoTileCoords.y << ")" << std::endl;
-	}
+	}*/
 
 	// 마름모 충돌체크
 
@@ -636,18 +696,32 @@ void SceneDev1::Update(float dt)
 		isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y);
 
 		if (isColliding == diaBounds.contains(uiMousePos.x, uiMousePos.y)
-			&& INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left))
+			&& INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && !towerUpgradeCheck1)
 		{
 			std::cout << "충돌체크1" << std::endl;
 			towerBuildCheck1 = !towerBuildCheck1;
+			
 		}
 
-		if (!towerBuildCheck1 && INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
+		if (isColliding == diaBounds.contains(uiMousePos)
+			&& INPUT_MGR.GetMouseButtonDown(sf::Mouse::Left) && towerUpgradeCheck1)
+		{
+			SCENE_MGR.SetdtSpeed(0);
+			upgradeArcher2->SetActive(true);
+			upgradeText->SetActive(true);
+
+			FindGo("Upgrade Button")->SetActive(true);
+			//upgradeButton->SetActive(true);
+			//giveupButton->SetActive(true);
+		}
+
+		if (!towerBuildCheck1 && INPUT_MGR.GetKeyDown(sf::Keyboard::Num1) && !towerUpgradeCheck1)
 		{
 			BuildTower(Tower::Types::ArcherTower1, { 586, 197 });
 			towerBuildCheck1 = !towerBuildCheck1;
+			towerUpgradeCheck1 = !towerUpgradeCheck1;
 		}
-		else if (!towerBuildCheck1 && INPUT_MGR.GetKeyDown(sf::Keyboard::Num2))
+		else if (!towerBuildCheck1 && INPUT_MGR.GetKeyDown(sf::Keyboard::Num2) && !towerUpgradeCheck1)
 		{
 			BuildTower(Tower::Types::WizardTower1, { 586, 197 });
 			towerBuildCheck1 = !towerBuildCheck1;
@@ -668,7 +742,7 @@ void SceneDev1::Update(float dt)
 			std::cout << "충돌체크2" << std::endl;
 			towerBuildCheck2 = !towerBuildCheck2;
 		}
-
+		
 		if (!towerBuildCheck2 && INPUT_MGR.GetKeyDown(sf::Keyboard::Num1))
 		{
 			BuildTower(Tower::Types::ArcherTower1, { 857, 248 });
@@ -856,12 +930,25 @@ void SceneDev1::OnDieEnemy(Enemy* enemy)
 	
 	
 
-	gold += 3; // 몬스터 타입따라서 골드추가
+	gold += 4; // 몬스터 타입따라서 골드추가
 
 	std::string goldString = "Gold: " + std::to_string(gold);
 	goldText->text.setString(sf::String::fromUtf8(goldString.begin(), goldString.end()));
 
-	//SpriteEffect* goldE = 
+	SpriteEffect* goldEffect = goldEffectPool.Get();
+
+	
+	//goldEffect->Anima
+
+	goldEffect->SetPosition(enemy->GetPosition());
+	AddGo(goldEffect);
+
+	float goldEffectSize = 0.5 + (1.0 - ((int)enemy->GetType() * 0.5));
+	float rot = Utils::RandomRange(0, 270);
+
+	goldEffect->SetSize(goldEffectSize, goldEffectSize);
+	goldEffect->sprite.setRotation(rot);
+	//animation.Play("Idle");
 
 	RemoveGo(enemy);
 	enemyPool.Return(enemy);
@@ -911,20 +998,30 @@ const std::list<Tower*>* SceneDev1::GetTowerList() const
 	return &towerPool.GetUseList();
 }
 
-//void SceneDev1::TowerAttack()
-//{
-//
-//
-//}
 
 void SceneDev1::BuildTower(Tower::Types towerType, sf::Vector2f pos)
 {
+	/*if (gold < 0)
+	{
+		return;
+	}
+	else if (gold >= 0)
+	{
+		Tower* tower = towerPool.Get();
+		tower->SetType(towerType);
+		tower->SetPosition(pos);
+		tower->Reset();
+		UpdateGold(80);
+		AddGo(tower);
+	}
+	*/
 	Tower* tower = towerPool.Get();
 	tower->SetType(towerType);
 	tower->SetPosition(pos);
 	tower->Reset();
 	UpdateGold(80);
 	AddGo(tower);
+	
 
 	std::cout << tower->GetPosition().x << " , " << tower->GetPosition().y << std::endl;
 }
@@ -961,6 +1058,14 @@ void SceneDev1::Test()
 	}
 
 
+}
+
+void SceneDev1::ResetGame()
+{
+	ClearObjectPool(enemyPool);
+	ClearObjectPool(towerPool);
+	ClearObjectPool(arrowPool);
+	ClearObjectPool(objectPool);
 }
 
 void SceneDev1::StartGame()

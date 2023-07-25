@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 
 class AnimationController
 {
@@ -39,5 +40,7 @@ public:
 
 	void Stop();
 	void SetFrame(const AnimationFrame& frame);
+
+	std::string GetCurrentClipId();
 };
 

@@ -9,6 +9,7 @@
 #include "Object.h"
 #include "TextGo.h"
 #include "UIButton.h"
+#include "DataTableMgr.h"
 
 class Enemy;
 class Arrow;
@@ -22,9 +23,11 @@ protected:
 
 	// std::map<std::string, bool> mouseOverStates; // ui 버튼 추가시 주석 제거
 	sf::Sprite background;
-
+	
+	UIButton* giveupButton;
 	SpriteGo* roundStart;
 	SpriteGo* pauseBoard;
+	SpriteGo* upgradeArcher2;
 	//UIButton* pauseButton;
 	//UIButton* volumeOnButton;
 	//UIButton* volumeOffButton;
@@ -62,7 +65,7 @@ protected:
 	bool isRoundStart = false;
 	int roundCheck = 1; // 1라운드, 2라운드 ....
 	int roundTotalEnemy = 0;
-	int roundCountEnemy = 2;
+	int roundCountEnemy = 35;
 	float enemytrigger = 0.0f;
 	float raceMode = 0.0f;
 	int reaceModeCount = 5;
@@ -86,6 +89,13 @@ protected:
 	bool towerBuildCheck5 = true;
 	bool towerBuildCheck6 = true;
 
+	bool towerUpgradeCheck1 = false;
+	bool towerUpgradeCheck2 = false;
+	bool towerUpgradeCheck3 = false;
+	bool towerUpgradeCheck4 = false;
+	bool towerUpgradeCheck5 = false;
+	bool towerUpgradeCheck6 = false;
+
 	sf::FloatRect enemyBounds; // 충돌체크
 
 
@@ -95,6 +105,7 @@ protected:
 	TextGo* lifeText;
 	TextGo* goldText;
 	TextGo* waveText;
+	TextGo* upgradeText;
 
 	int life = 15;
 	int gold = 320;
@@ -149,6 +160,8 @@ public:
 	void UpdateGold(int amount);
 
 	void Test();
+
+	void ResetGame();
 
 };
 
