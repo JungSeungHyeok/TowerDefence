@@ -20,8 +20,14 @@ void SpriteEffect::Reset()
 	sprite.setColor({ 255, 255, 255, 255 });
 }
 
+void SpriteEffect::Release()
+{
+	SpriteGo::Release();
+}
+
 void SpriteEffect::Update(float dt)
 {
+	SpriteGo::Update(dt);
 	timer += dt;
 	//UINT8 a = Utils::Lerp(255, 0, (timer / duration));
 	//sprite.setColor({ 255, 255, 255, a });

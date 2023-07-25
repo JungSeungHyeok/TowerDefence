@@ -162,6 +162,7 @@
     <ClCompile Include="ArrowTable.cpp" />
     <ClCompile Include="DataTables\DataTable.cpp" />
     <ClCompile Include="DataTables\StringTable.cpp" />
+    <ClCompile Include="EffectGo.cpp" />
     <ClCompile Include="EnemyTable.cpp" />
     <ClCompile Include="Framework\DataTableMgr.cpp" />
     <ClCompile Include="Framework\Framework.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="ArrowTable.h" />
     <ClInclude Include="DataTables\DataTable.h" />
     <ClInclude Include="DataTables\StringTable.h" />
+    <ClInclude Include="EffectGo.h" />
     <ClInclude Include="EnemyTable.h" />
     <ClInclude Include="Framework\DataTableMgr.h" />
     <ClInclude Include="Framework\ObjectPool.h" />

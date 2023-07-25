@@ -10,6 +10,8 @@ protected:
 	SceneMgr() = default;
 	virtual ~SceneMgr() override = default;
 
+	float dtSpeed = 1.0f;
+
 	std::vector<Scene*> scenes;
 	SceneId currentSceneId = SceneId::None;
 	Scene* currentScene = nullptr;
@@ -22,6 +24,7 @@ public:
 
 	void Update(float dt);
 	void Draw(sf::RenderWindow& window);
+	void SetdtSpeed(float speed);
 
 	void ChangeScene(SceneId id);
 	Scene* GetCurrScene() const;

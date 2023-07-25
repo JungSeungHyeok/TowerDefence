@@ -32,6 +32,18 @@ void SpriteGo::SetOrigin(Origins origin)
 	}
 }
 
+void SpriteGo::SetSize(float xSize, float ySize) // Ãß°¡
+{
+	sprite.setScale(xSize, ySize);
+}
+
+sf::Vector2f SpriteGo::GetSize() const
+{
+	sf::FloatRect rect = sprite.getLocalBounds();
+	return sf::Vector2f(rect.width, rect.height);
+}
+
+
 void SpriteGo::SetOrigin(float x, float y)
 {
 	GameObject::SetOrigin(x, y);

@@ -1,7 +1,7 @@
-ID,TEXTURE_ID,DAMAGE,RANGE,ATTACKRATE,ARROWSPEED,PRICE
-0,Towers/Archer/archer_level_1.png,10,150,2,10,70
-1,Towers/Archer/archer_level_2.png,20,300,4,30,120
-2,Towers/Archer/archer_level_3.png,30,500,8,50,240
-3,Towers/Wizard/wizard_level_1.png,40,130,100,100,150
-4,Towers/Wizard/wizard_level_2.png,80,260,1,30,200
-5,Towers/Wizard/wizard_level_3.png,350,400,1,50,360
+ID,TEXTURE_ID,DAMAGE,RANGE,ARROWSPEED,ATTACKRATE,PRICE
+0,Towers/Archer/archer_level_1.png,10,250,150,0.5,70
+1,Towers/Archer/archer_level_2.png,20,350,200,0.3,120
+2,Towers/Archer/archer_level_3.png,30,500,300,0.2,240
+3,Towers/Wizard/wizard_level_1.png,40,200,150,1,150
+4,Towers/Wizard/wizard_level_2.png,80,300,150,1,200
+5,Towers/Wizard/wizard_level_3.png,350,400,200,1,360

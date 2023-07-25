@@ -1,13 +1,10 @@
 #include "stdafx.h"
 #include "Tower.h"
 #include "TowerTable.h"
-
 #include "InputMgr.h"
 #include "TileMap.h" // 7-17 리셋부분 참고 추가
-
 #include "SceneDev1.h"
 #include "ArrowTable.h"
-
 
 void Tower::SetPosition(float x, float y)
 {
@@ -24,7 +21,6 @@ void Tower::SetPosition(const sf::Vector2f& p)
 
 void Tower::Init()
 {
-
 	animation.SetTarget(&sprite);
 	SetOrigin(Origins::BC);
 }
@@ -37,9 +33,9 @@ void Tower::Reset()
 
 	damage = info.damage;
 	range = info.range;
-	attackRate = info.attackRate;
 	arrowSpeed = info.arrowSpeed;
-	price = info.price;                     // 타워정보 검색용
+	attackRate = info.attackRate;
+	//price = info.price;                     // 타워정보 검색용
 	sortLayer = 6;
 	//SetActive(false);
 }
@@ -51,13 +47,20 @@ void Tower::Update(float dt)
 
 
 	//if (enemy != nullptr)
-	TowerAttack();
+	attackTrigger += dt;
+	
+	if (attackTrigger >= attackRate)
+	{
+		TowerAttack();
+		attackTrigger = 0.f;
+	}
+
+	//std::cout << "attackTrigger: " << attackTrigger << std::endl;
+	// arrowTowerAttack()
+	// wizadTowerAttack()
 
 
-
-
-
-	GetSearchEnemy();
+	//GetSearchEnemy();
 	//LostEnemy(); // 몬스터 잃어버렸는지? 사거리 밖에 나가서
 }
 
@@ -75,19 +78,20 @@ bool Tower::Load(const std::string& filePath)
 void Tower::SetType(Types t)
 {
 	towerType = t;
-
 	const TowerInfo& info = DATATABLE_MGR.Get<TowerTable>(DataTable::Ids::Tower)->Get(t);
-
 	int index = (int)towerType;
 	textureId = info.textureId; // 초기화 할 수 있께?
+	damage = info.damage;
+	range = info.range;
+	arrowSpeed = info.arrowSpeed;
+	attackRate = info.attackRate;
+	//price = info.price;
 }
 
 Tower::Types Tower::GetType() const
 {
 	return towerType;
 }
-
-
 
 void Tower::LostEnemy()
 {
@@ -107,62 +111,60 @@ void Tower::SetEnemyList(const std::list<Enemy*>* list)
 	enemys = list;
 }
 
-void Tower::GetSearchEnemy()
+void Tower::SetArrowList(const std::list<Arrow*>* list)
 {
-
+	arrows = list;
 }
 
 void Tower::GetEnemy(Enemy* enemy)
 {
-	if (this->enemy == nullptr)
-		this->enemy = enemy;
+	/*if (this->enemy == nullptr)
+		this->enemy = enemy;*/
 }
 
 void Tower::TowerAttack()
 {
-	// 애로우세팅
-	auto info = DATATABLE_MGR.Get<ArrowTable>(DataTable::Ids::Arrow)->Get(Arrow::Types::Arrow);
-	Arrow* arrow = poolArrows->Get();
-	arrow->SetPosition(this->position);
-	arrow->SetType(info.arrowType); //(Arrow::Types::Arrow); // 일단 화살만
-	// arrow->Aiming(speed, range, damage, direction); // 파이어있고
-
-	// 애니미세팅
 	Scene* scene = SCENE_MGR.GetCurrScene();
 	SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
-	if (sceneDev1 != nullptr)
-	{
-		SetEnemyList(sceneDev1->GetEnemyList());
-		//sceneDev1->AddGo(arrow);
-	}
 
-	
-
-	direction = Utils::Normalize(enemy->GetPosition() - position); // 몬스터 포지션 - 타워포지션
-
-	
+	// 셋 에미니 리스트는 한번만
+	// 그 함수 안에는 뭐 인포 다 초기화
+	// 에드고 마지막
 
 	for (auto enemy : *enemys)
 	{
-		float distance = Utils::Distance(this->position, enemy->GetPosition());
-		std::cout << "Distance: " << distance << std::endl;
+		float distance = Utils::Distance({ this->position.x, this->position.y}, { enemy->GetPosition().x, enemy->GetPosition().y + 42 });
+		//std::cout << "Distance: " << distance << std::endl;
+		sf::Vector2f Realposition = { enemy->GetPosition().x, enemy->GetPosition().y + 32 };
+
+		direction = Utils::Normalize(Realposition - position);
+		// 몬스터 포지션 - 타워포지션
 
 		if (distance <= range)
 		{
-			std::cout << "쏨" << std::endl;
-			arrow->Aiming(speed, range, damage, direction);
+			//std::cout << "쏨" << std::endl;
+
+			Arrow* arrow = poolArrows->Get();
+			arrow->SetPosition(this->position);
+			arrow->SetType(Arrow::Types::Arrow); //(Arrow::Types::Arrow); // 일단 화살만
+			arrow->Aiming({GetPosition().x, GetPosition().y - 42}, direction, arrowSpeed, range, damage);
+			//info.arrowSpeed가 작동을 안함
+			sceneDev1->AddGo(arrow);
+			return;
 
 			//enemy->GetPosition();
 			// tower->GetEnemy(this); // 몬스터가 타워에다가 자기 본인을 넘기는것
 			//tower->Getdistanc(this)
-			return; // 한번만
+			 // 한번만
 			// 타워와 나 자신의 위치
 			// 이렇게 할거면 방향을 여기서 넘겨주어야함
 		}
+		
 	}
 
-	//Scene* scene = SCENE_MGR.GetCurrScene();
-	//SceneDev1* sceneDev1 = dynamic_cast<SceneDev1*>(scene);
+
+	//arrow->Aiming(speed, range, damage, direction);
+
 
 	//if (sceneDev1 != nullptr)
 	//{
@@ -171,21 +173,3 @@ void Tower::TowerAttack()
 	//}
 	
 }
-
-//
-//sf::Vector2f Tower::GetSize()
-//{
-//	sf::Vector2f size = { 50, 64 };
-//	return size;
-//}
-//
-//sf::Vector2f Tower::GetCenter()
-//{
-//	sf::Vector2f size = { 50, 64 };
-//	sf::Vector2f center;
-//
-//	center.x = size.x + size.y / 2;
-//	center.y = size.x + size.y / 2;
-//
-//	return center;
-//}

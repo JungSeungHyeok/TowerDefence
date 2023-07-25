@@ -22,8 +22,6 @@ void SceneMgr::Init()
 	scenes.push_back(new SceneTitle());
 	
 	
-	
-	
 	// Å¸¿ö ¼±ÅÃ ¾À
 	// µîµî ui¾À
 
@@ -59,12 +57,17 @@ void SceneMgr::Release()
 
 void SceneMgr::Update(float dt)
 {
-	currentScene->Update(dt);
+	currentScene->Update(dt * dtSpeed);
 }
 
 void SceneMgr::Draw(sf::RenderWindow& window)
 {
 	currentScene->Draw(window);
+}
+
+void SceneMgr::SetdtSpeed(float speed)
+{
+	dtSpeed = speed;
 }
 
 void SceneMgr::ChangeScene(SceneId id)

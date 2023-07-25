@@ -11,8 +11,9 @@ bool TowerTable::Load()
 
     std::vector<int> damageArr = doc.GetColumn<int>(2); // º¯°æ
     std::vector<int> rangeArr = doc.GetColumn<int>(3);
-    std::vector<float> attackRateArr = doc.GetColumn<float>(4);
-    std::vector<int> priceArr = doc.GetColumn<int>(5);
+    std::vector<int> arrowSpeedArr = doc.GetColumn<int>(4);
+    std::vector<float> attackRateArr = doc.GetColumn<float>(5);
+    std::vector<int> priceArr = doc.GetColumn<int>(6);
 
     for (int i = 0; i < ids.size(); ++i)
     {
@@ -21,8 +22,9 @@ bool TowerTable::Load()
         info.textureId = texId[i];
         info.damage = damageArr[i];
         info.range = rangeArr[i];
+        info.arrowSpeed = arrowSpeedArr[i];
         info.attackRate = attackRateArr[i];
-        info.price = priceArr[i];
+        //info.price = priceArr[i];
 
         towerTables.insert({ info.towerType , info });
     }

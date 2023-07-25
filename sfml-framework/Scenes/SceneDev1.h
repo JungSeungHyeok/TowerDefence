@@ -10,11 +10,11 @@
 #include "TextGo.h"
 #include "UIButton.h"
 
-
 class Enemy;
 class Arrow;
 // class 스프라이트 이펙트
 class TileMap;
+class SpriteEffect;
 
 class SceneDev1 : public Scene
 {
@@ -24,12 +24,19 @@ protected:
 	sf::Sprite background;
 
 	SpriteGo* roundStart;
+	SpriteGo* pauseBoard;
+	//UIButton* pauseButton;
+	//UIButton* volumeOnButton;
+	//UIButton* volumeOffButton;
+
 	//sf::Sprite roundStart;
+
 	float targetDuration = 2.0f;
 	float trigger = 0.0f;
+
+
 	sf::Vector2f currentPosition = { 640, 400 };
 	sf::Vector2f targetPosition = { 1241, 33 };
-	
 
 	AnimationController animation;
 	TileMap* tileMap = nullptr;
@@ -42,6 +49,7 @@ protected:
 	ObjectPool<Tower> towerPool;
 	ObjectPool<Arrow> arrowPool;
 	ObjectPool<Object> objectPool;
+	ObjectPool<SpriteEffect> goldEffectPool;
 
 	const std::list<Enemy*>* enemys;
 
@@ -49,6 +57,15 @@ protected:
 
 	bool isInstalled = false;
 	bool testHide = false;
+
+	// 라운드, 스테이지 등
+	bool isRoundStart = false;
+	int roundCheck = 1; // 1라운드, 2라운드 ....
+	int roundTotalEnemy = 0;
+	int roundCountEnemy = 2;
+	float enemytrigger = 0.0f;
+	float raceMode = 0.0f;
+	int reaceModeCount = 5;
 
 
 	sf::ConvexShape diamond1;
@@ -58,7 +75,7 @@ protected:
 	sf::ConvexShape diamond5;
 	sf::ConvexShape diamond6;
 	sf::FloatRect diaBounds;
-	
+
 	const float diamondWidth = 35.f;
 	const float diamondHeight = 35.f; // 마름모 크기
 
@@ -70,17 +87,18 @@ protected:
 	bool towerBuildCheck6 = true;
 
 	sf::FloatRect enemyBounds; // 충돌체크
+
+
 	bool GameOver = false;
 
-	//int tileHei = 0;
-	//int tileWid = 0;
-
-	int round = 0;
-	int stage = 0;
-	int gold = 0;
 
 	TextGo* lifeText;
-	int life = 0;
+	TextGo* goldText;
+	TextGo* waveText;
+
+	int life = 15;
+	int gold = 320;
+	int wave = 1;
 	
 	int frame = 0; // 프레임 체크 시간나면
 	float totalDt = 0;
@@ -115,16 +133,20 @@ public:
 	void BuildObject(int count, sf::Vector2f pos);
 
 	// 몬스터 관련
-	void SpawnEnemys(int count, sf::Vector2f pos); // 레디우스
+	void SetEnemyList(const std::list<Enemy*>* list); // 추가
+	void SpawnEnemys(int enemyCount, Enemy::Types type); // 레디우스
 	void OnDieEnemy(Enemy* enemy);
 	void EnemyEndPoint(Enemy* enemy);
 
-	const std::list<Enemy*>* GetEnemyList() const;
+	
 	const std::list<Tower*>* GetTowerList() const;
+	const std::list<Enemy*>* GetEnemyList() const;
+	const std::list<Arrow*>* GetArrowList() const;
 
 	// 타워 관련 , 셋포지션도 추가
-	void TowerAttack();
+	//void TowerAttack();
 	void BuildTower(Tower::Types towerType, sf::Vector2f pos);
+	void UpdateGold(int amount);
 
 	void Test();
 

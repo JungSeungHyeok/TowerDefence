@@ -1,7 +1,6 @@
 #pragma once
 #include "SpriteGo.h"
 #include "ObjectPool.h"
-
 #include "AnimationController.h"
 
 // 몬스터 충돌 체크할때 이미지 띄워서 하기?
@@ -27,7 +26,7 @@ public:
 protected:
 	AnimationController animation;
 	Types enemyType;
-	const std::list<Tower*>* towers;
+	const std::list<Tower*>* towers = nullptr;
 	sf::Vector2f currPoint;
 
 	sf::Vector2f point1 = { 855.f, 268.f };
@@ -42,7 +41,8 @@ protected:
 	sf::Vector2f point4 = { 1034.f, 381.f };
 	sf::Vector2f point5 = { 1270.f, 516.f };*/
 
-	sf::Vector2f direction;
+	sf::Vector2f direction = { 0,0 };
+
 
 	float speed = 0.f;
 	int maxHp = 0;
@@ -59,6 +59,8 @@ protected:
 	bool realEndPoint = false;
 
 public:
+	// ObjectPool<Tower> towerPool;
+
 	Enemy(const std::string& textureId = "", const std::string n = "");
 	virtual~Enemy()override;
 
@@ -72,6 +74,7 @@ public:
 	Types GetType() const;
 
 	// 몬스터가 타워한테 맞는부분
+	void SetTowerList(const std::list<Tower*>* list);
 	void OnTakeDamege(int damage);  // 필수
 
 	// 정면 벽? void SetWall(); 

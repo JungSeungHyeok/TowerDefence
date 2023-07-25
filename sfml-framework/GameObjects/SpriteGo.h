@@ -18,6 +18,9 @@ public:
 	virtual void SetOrigin(Origins origin);
 	virtual void SetOrigin(float x, float y);
 
+	virtual void SetSize(float xSize, float ySize);
+	sf::Vector2f GetSize() const;
+
 	virtual void Init() override;
 	virtual void Release() override;
 	virtual void Reset() override;

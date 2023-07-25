@@ -15,8 +15,6 @@ void SceneTitle::Init()
 	sf::Vector2f size = FRAMEWORK.GetWindowSize();
 
 	
-	
-
 	SpriteGo* startScene = (SpriteGo*)AddGo(new SpriteGo("Ui/StartScene.png", "Start Scene"));
 	startScene->SetOrigin(Origins::MC);
 	startScene->sortLayer = 100;

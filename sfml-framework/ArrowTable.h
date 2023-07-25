@@ -8,9 +8,9 @@ struct ArrowInfo
     Arrow::Types arrowType;
     std::string textureId;
 
-    float speed;
-    float range;
     int damage;
+    float range;
+    float speed;
 
 };
 

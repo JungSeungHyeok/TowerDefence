@@ -26,17 +26,18 @@ protected:
 
 	//ObjectPool<Enemy> enemyPool;
 
+	sf::Vector2f position;
 	sf::Vector2f direction;
-	float speed;
-	float range;
-	int damage;
+	float speed = 0;
+	float range = 0;
+	int damage = 0;
 
 	const std::list<Enemy*>* enemys = nullptr;
 
 	// const Tower::Types* towerType; 다시보기
 
 public:
-	ObjectPool<Arrow>* pool;
+	ObjectPool<Arrow>* arrowPool = nullptr;
 
 	Arrow(const std::string& textureId = "", const std::string& n = "")
 		:SpriteGo(textureId, n) {}
@@ -50,7 +51,15 @@ public:
 	void SetType(Types t);
 	Types GetType() const;
 
-	void Aiming(float range, float speed, int damage, sf::Vector2f direction);
+	void GetArrowPool(ObjectPool<Arrow>* pool)
+	{
+		this->arrowPool = pool;
+	}
+
+	void Aiming(sf::Vector2f pos, sf::Vector2f direction, float speed, float range, int damage); // 포즈, 디렉션, 스피드 등 포즈를 넘기기
+		
+		//float range, float speed, int damage, sf::Vector2f direction);
+		
 	void SetEnemyList(const std::list<Enemy*>* list);
 
 };

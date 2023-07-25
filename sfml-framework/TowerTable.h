@@ -10,10 +10,11 @@ struct TowerInfo
 
     int damage;
     int range;
+    float arrowSpeed;
     float attackRate;
     int price;
 
-    float arrowSpeed;
+    
     //float attackTimer = 0.f;
 
 };

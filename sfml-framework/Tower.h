@@ -40,6 +40,7 @@ protected:
 	Enemy* enemy;
 
 	const std::list<Enemy*>* enemys;
+	const std::list<Arrow*>* arrows;
 
 	// 갖고 있을 필요가 있나
 
@@ -47,13 +48,14 @@ protected:
 	
 
 	sf::Vector2f direction; // 추가
-	int damage;
-	int range;
-	float speed;
+	int damage = 0;
+	int range = 0;
+	float arrowSpeed = 0;
+	
+	int price = 0;
+	float attackTrigger = 0.0f;
+	float attackRate = 0.f;
 
-	float attackRate;
-	float arrowSpeed;
-	int price;
 
 
 public:
@@ -73,10 +75,10 @@ public:
 	Types GetType() const;
 
 	void SetEnemyList(const std::list<Enemy*>* list); // 필수1
-
-	void GetSearchEnemy();
+	void SetArrowList(const std::list<Arrow*>* list); // 추가
 
 	void GetEnemy(Enemy* enemy);
+
 
 	void LostEnemy();
 

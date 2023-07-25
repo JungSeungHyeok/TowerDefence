@@ -1,3 +1,3 @@
-ID,TEXTURE_ID,SPEED,RANGE,DAMAGE
-0,Towers/Archer/arrow.png,100,500,100
-1,Towers/Wizard/wizard_bullet.png,100,500,100
+ID,TEXTURE_ID,DAMAGE,RANGE,ARROW_SPEED
+0,Towers/Archer/arrow.png,100,500,200
+1,Towers/Wizard/wizard_bullet.png,100,500,150

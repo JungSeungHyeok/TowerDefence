@@ -32,6 +32,5 @@ public:
     const EnemyInfo& Get(Enemy::Types id);
 
 
-
 };
 

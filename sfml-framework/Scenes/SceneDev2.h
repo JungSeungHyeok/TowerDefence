@@ -1,5 +1,7 @@
 #pragma once
 #include "Scene.h"
+#include "UIButton.h"
+
 class SceneDev2 : public Scene
 {
 protected:

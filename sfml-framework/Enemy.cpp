@@ -15,6 +15,7 @@
 
 #include "DataTableMgr.h" // 18일 저녁에 집에서 추가
 
+
 Enemy::Enemy(const std::string& textureId, const std::string n)
 	:SpriteGo(textureId, n)
 {
@@ -110,8 +111,15 @@ void Enemy::SetType(Types t)
 
 	int index = (int)enemyType;
 	textureId = info.textureId; // 초기화 할 수 있께?
-	/*textureId = info.speed;
-	textureId = info.maxHp;*/
+	speed = info.speed;
+	hp = info.maxHp;
+	
+	// 크기가 다 똑같으면 상관없는데 크기가 다르면 짤려서 나오니까
+	// 스
+	sprite.setTexture(*RESOURCE_MGR.GetTexture(textureId)); // 이렇게 텍스쳐를 새로지정하는것도 추가를 해주어야함
+	//SetOrigin(Origins::MC);
+
+	
 
 }
 
@@ -119,6 +127,13 @@ Enemy::Types Enemy::GetType() const
 {
 	return enemyType;
 }
+
+
+void Enemy::SetTowerList(const std::list<Tower*>* list)
+{
+	towers = list;
+}
+
 
 void Enemy::OnTakeDamege(int damage)
 {
