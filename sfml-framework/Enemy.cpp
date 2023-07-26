@@ -30,7 +30,17 @@ void Enemy::Init()
 	SpriteGo::Init();
 	SetOrigin(Origins::MC);
 	
+	
 
+
+	hpBackground.setSize(sf::Vector2f(hpBarWidth, hpBarHeight));
+	hpBackground.setFillColor(sf::Color::White);
+	hpBackground.setPosition(position.x - hpBarWidth / 2, position.y - 20.f);
+
+	hpBar.setSize(sf::Vector2f(hpBarWidth, hpBarHeight));
+	hpBar.setFillColor(sf::Color::Green);
+	hpBar.setPosition(position.x - hpBarWidth / 2, position.y - 20.f);
+	sortLayer = 7;
 	currPoint = point1;
 }
 
@@ -65,9 +75,15 @@ void Enemy::Update(float dt)
 
 	direction = Utils::Normalize(currPoint - position); // 방향 구하고
 
+	float enemyHpPercent = static_cast<float>(hp) / static_cast<float>(maxHp);
+	float hpBarWidth = enemyHpPercent * 40.f;
+	hpBar.setSize(sf::Vector2f(hpBarWidth, hpBarHeight));
+
+
 	position += direction * speed * dt;
 	sprite.setPosition(position); // 추가
 
+	hpBar.setPosition(position);
 
 	if (currPoint == point1)
 		if (Utils::Distance(point1, position) < 0.5f)

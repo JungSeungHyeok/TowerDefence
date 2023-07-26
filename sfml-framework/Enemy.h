@@ -13,15 +13,12 @@ class Enemy: public SpriteGo
 public:
 	enum class Types
 	{
-		Ufo1,
-		Ufo2,
-		Ufo3,
-		Ufo4,
-		Ufo5,
-		Ufo6,
-		Ufo7,
+		Ufo1, Ufo2, Ufo3, Ufo4, Ufo5, Ufo6,
+		Ufo7, Ufo8, Ufo9, Ufo10, Ufo11, Ufo12,
+		Ufo13, Ufo14, Ufo15, Ufo16, Ufo17, Ufo18,
+		Ufo19, Ufo20, Ufo21
 	};
-	static const int TotalTypes = 7;
+	static const int TotalTypes = 21;
 
 protected:
 	AnimationController animation;
@@ -43,6 +40,11 @@ protected:
 
 	sf::Vector2f direction = { 0,0 };
 
+	sf::RectangleShape hpBackground;
+	sf::RectangleShape hpBar;
+
+	float hpBarWidth = 40.f;
+	float hpBarHeight = 5.f;
 
 	float speed = 0.f;
 	int maxHp = 0;

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SpriteGo.h"
 
-SpriteGo::SpriteGo(const std::string& textureId = "", const std::string& n = "")
+SpriteGo::SpriteGo(const std::string& textureId, const std::string& n)
 	: GameObject(n), textureId(textureId)
 {
 }

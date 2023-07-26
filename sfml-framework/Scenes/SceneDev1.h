@@ -21,17 +21,32 @@ class SceneDev1 : public Scene
 {
 protected:
 
-	// std::map<std::string, bool> mouseOverStates; // ui 버튼 추가시 주석 제거
-	sf::Sprite background;
+	int life = 15;
+	int gold = 320;
+	int wave = 1;
+
+	// 라운드, 스테이지 등
+	bool isRoundStart = false;
+	int roundCheck = 1; // 1라운드, 2라운드 ....
+	int roundTotalEnemy = 0;
+	int roundCountEnemy = 20;
+	float enemytrigger = 0.0f;
+	float raceMode = 0.0f;
+	int reaceModeCount = 1;
 	
+	sf::Sprite background;
 	UIButton* giveupButton;
 	SpriteGo* roundStart;
 	SpriteGo* pauseBoard;
+
+	SpriteGo* basicArcher;
 	SpriteGo* upgradeArcher2;
+	SpriteGo* upgradeArcher3;
+
 	//UIButton* pauseButton;
 	//UIButton* volumeOnButton;
 	//UIButton* volumeOffButton;
-
+	// std::map<std::string, bool> mouseOverStates; // ui 버튼 추가시 주석 제거
 	//sf::Sprite roundStart;
 
 	float targetDuration = 2.0f;
@@ -61,16 +76,6 @@ protected:
 	bool isInstalled = false;
 	bool testHide = false;
 
-	// 라운드, 스테이지 등
-	bool isRoundStart = false;
-	int roundCheck = 1; // 1라운드, 2라운드 ....
-	int roundTotalEnemy = 0;
-	int roundCountEnemy = 35;
-	float enemytrigger = 0.0f;
-	float raceMode = 0.0f;
-	int reaceModeCount = 5;
-
-
 	sf::ConvexShape diamond1;
 	sf::ConvexShape diamond2;
 	sf::ConvexShape diamond3;
@@ -82,19 +87,27 @@ protected:
 	const float diamondWidth = 35.f;
 	const float diamondHeight = 35.f; // 마름모 크기
 
-	bool towerBuildCheck1 = true;
-	bool towerBuildCheck2 = true;
-	bool towerBuildCheck3 = true;
-	bool towerBuildCheck4 = true;
-	bool towerBuildCheck5 = true;
-	bool towerBuildCheck6 = true;
+	bool towerUpgradeCheck1 = true;
+	bool towerUpgradeCheck2 = true;
+	bool towerUpgradeCheck3 = true;
+	bool towerUpgradeCheck4 = true;
+	bool towerUpgradeCheck5 = true;
+	bool towerUpgradeCheck6 = true;
 
-	bool towerUpgradeCheck1 = false;
-	bool towerUpgradeCheck2 = false;
-	bool towerUpgradeCheck3 = false;
-	bool towerUpgradeCheck4 = false;
-	bool towerUpgradeCheck5 = false;
-	bool towerUpgradeCheck6 = false;
+	bool towerbuildComplete1 = true;
+	bool towerbuildComplete2 = true;
+	bool towerbuildComplete3 = true;
+	bool towerbuildComplete4 = true;
+	bool towerbuildComplete5 = true;
+	bool towerbuildComplete6 = true;
+
+	bool towerUpgradeComplete1 = false;
+	bool towerUpgradeComplete2 = false;
+	bool towerUpgradeComplete3 = false;
+	bool towerUpgradeComplete4 = false;
+	bool towerUpgradeComplete5 = false;
+	bool towerUpgradeComplete6 = false;
+
 
 	sf::FloatRect enemyBounds; // 충돌체크
 
@@ -105,15 +118,20 @@ protected:
 	TextGo* lifeText;
 	TextGo* goldText;
 	TextGo* waveText;
-	TextGo* upgradeText;
+	TextGo* buyText;
 
-	int life = 15;
-	int gold = 320;
-	int wave = 1;
+	TextGo* basicText;
+	TextGo* upgradeText2;
+	TextGo* upgradeText3;
+
+
 	
 	int frame = 0; // 프레임 체크 시간나면
 	float totalDt = 0;
 	bool frameCheck = false;
+
+	SpriteGo goldCoin;
+	AnimationController goldAnimation;
 
 public:
 	SceneDev1();
@@ -157,6 +175,8 @@ public:
 	// 타워 관련 , 셋포지션도 추가
 	//void TowerAttack();
 	void BuildTower(Tower::Types towerType, sf::Vector2f pos);
+	void BuildUpgradeTower(Tower::Types towerType, sf::Vector2f pos);
+	void BuildUpgradeTower2(Tower::Types towerType, sf::Vector2f pos);
 	void UpdateGold(int amount);
 
 	void Test();
